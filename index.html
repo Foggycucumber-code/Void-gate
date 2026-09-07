@@ -9,7 +9,7 @@
         body {
             background-color: #030303;
             color: #00ff41;
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -21,14 +21,14 @@
             background: #080808;
             border: 1px solid #00ff41;
             box-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
-            padding: 30px;
-            max-width: 550px;
+            padding: 25px;
+            max-width: 580px;
             width: 100%;
             text-align: center;
             border-radius: 4px;
         }
         h1, h2 { font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px dashed #00ff41; padding-bottom: 10px; }
-        p { font-size: 0.9rem; line-height: 1.6; color: #a0ffa0; margin-bottom: 15px; }
+        p { font-size: 0.85rem; line-height: 1.6; color: #a0ffa0; margin-bottom: 15px; }
         input[type="text"] {
             width: 100%;
             background: #000;
@@ -36,8 +36,8 @@
             color: #fff;
             padding: 12px;
             font-family: monospace;
-            font-size: 1rem;
-            margin: 15px 0;
+            font-size: 0.95rem;
+            margin: 12px 0;
             outline: none;
             text-align: center;
         }
@@ -50,22 +50,37 @@
             font-weight: bold;
             font-family: monospace;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             display: inline-block;
             text-decoration: none;
         }
-        button:hover, .btn:hover { background: #00cc33; }
+        button:hover, .btn:hover { opacity: 0.85; }
         #log { margin-top: 15px; font-size: 0.85rem; min-height: 25px; line-height: 1.4; color: #ff3333; }
         .hidden { display: none !important; }
         
-        /* Стили для 4D Canvas */
-        #canvas-box { position: relative; width: 100%; height: 350px; margin: 15px 0; }
+        #canvas-box { position: relative; width: 100%; height: 320px; margin: 15px 0; }
         canvas { width: 100%; height: 100%; display: block; }
+        
+        /* Стили Уровня 4 (Энтропия) */
+        .hex-dump {
+            background: #020202;
+            border: 1px solid #ff5555;
+            color: #ff5555;
+            padding: 12px;
+            font-size: 0.75rem;
+            text-align: left;
+            word-break: break-all;
+            margin: 15px 0;
+            line-height: 1.5;
+            max-height: 140px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 10px rgba(255,85,85,0.2);
+        }
     </style>
 </head>
 <body>
 
-    <div class="terminal" id="term">
+    <div class="terminal">
         
         <!-- УРОВЕНЬ 1 -->
         <div id="lvl1">
@@ -78,30 +93,48 @@
             </form>
         </div>
 
-        <!-- УРОВЕНЬ 2 (Скрыт до решения 1-го) -->
+        <!-- УРОВЕНЬ 2 -->
         <div id="lvl2" class="hidden">
             <h2 style="color: #00e5ff; border-color: #00e5ff;">[ LEVEL 02 // ZERO_FREQUENCY_BEACON ]</h2>
             <p style="color: #a0f0ff;">The signal was captured from beyond the event horizon.<br>Human ears hear chaos. The spectrum sees the truth.</p>
             <audio controls src="anomaly.wav" style="width: 100%; margin: 15px 0;"></audio><br>
             <a href="anomaly.wav" download="anomaly.wav" class="btn" style="background: #00e5ff; margin-bottom: 20px;">DOWNLOAD WAV STREAM</a>
-            
             <form id="f2">
                 <input type="text" id="in2" placeholder="Enter Spectrogram Key..." style="border-color: #00e5ff;" autocomplete="off">
                 <button type="submit" style="background: #00e5ff;">DECODE SIGNAL</button>
             </form>
         </div>
 
-        <!-- УРОВЕНЬ 3 (Скрыт до решения 2-го) -->
+        <!-- УРОВЕНЬ 3 (ХАРДКОР) -->
         <div id="lvl3" class="hidden">
             <h2 style="color: #bd93f9; border-color: #bd93f9;">[ LEVEL 03 // TESSERACT TOPOLOGY ]</h2>
             <p style="color: #6272a4; font-style: italic;">"Umbra in quattuor dimensionibus non est nihil."</p>
             <div id="canvas-box">
                 <canvas id="tesseract"></canvas>
             </div>
-            <p style="color: #ff79c6; font-size: 0.8rem;">Rotate the 4D Shadow to align the quantum axis.</p>
-            <div id="lvl3-key" class="hidden" style="color: #50fa7b; font-weight: bold; margin-top: 10px;">
-                [ LEVEL 04 PORTAL UNLOCKED: 0x04_ENTROPY_WELL ]
+            <p style="color: #ff79c6; font-size: 0.75rem;">Precision Alignment Required: XW ⊥ YW [Tolerance: &plusmn;0.00001 rad]</p>
+            <form id="f3">
+                <input type="text" id="in3" placeholder="Enter 4D Alignment Vector..." style="border-color: #bd93f9;" autocomplete="off">
+                <button type="submit" style="background: #bd93f9; color: #000;">STABILIZE 4D AXIS</button>
+            </form>
+        </div>
+
+        <!-- УРОВЕНЬ 4 (КОЛОДЕЦ ЭНТРОПИИ) -->
+        <div id="lvl4" class="hidden">
+            <h2 style="color: #ff5555; border-color: #ff5555;">[ LEVEL 04 // INFORMATION BLACK HOLE ]</h2>
+            <p style="color: #ffb86c;">ENTROPY CRITICAL: <span id="entropy-val">7.9984</span> bits/byte.<br>A memory leak from a decaying Turing machine was captured.</p>
+            
+            <div class="hex-dump">
+                [XOR_MASK: 0x5A]<br>
+                71 7E 77 74 74 74 74 74 74 74 74 38 7B 77 77 77 77 77 77 77 77 74 74 74 74 74 74 74 74 74 38 77 77 77 77 77 77 77 77 74 74 74 74 74 74 74 74 74 74 74 38 7B 7B 7B 77 74 74 74 74 74 74 74 74 38 7B 7B 7B 7B 77 74 74 74 74 74 74 74 74 74 39 39 39 39 39 39 39 70 38 76 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 70 38 76 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 70 38 70 38 76 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 70
             </div>
+
+            <p style="color: #8be9fd; font-size: 0.75rem;">Reverse the XOR transformation. Execute the underlying logic.</p>
+
+            <form id="f4">
+                <input type="text" id="in4" placeholder="Enter Zero-Entropy Passcode..." style="border-color: #ff5555;" autocomplete="off">
+                <button type="submit" style="background: #ff5555; color: #fff;">STABILIZE SINGULARITY</button>
+            </form>
         </div>
 
         <div id="log"></div>
@@ -110,7 +143,7 @@
     <script>
         const log = document.getElementById('log');
 
-        // ЛОГИКА 1 УРОВНЯ:
+        // УРОВЕНЬ 1
         document.getElementById('f1').addEventListener('submit', function(e) {
             e.preventDefault();
             const val = document.getElementById('in1').value;
@@ -121,7 +154,7 @@
                     document.getElementById('lvl1').classList.add('hidden');
                     document.getElementById('lvl2').classList.remove('hidden');
                     log.innerText = "";
-                }, 1000);
+                }, 800);
             } else if (val.trim() === "0") {
                 log.style.color = "#ff3333";
                 log.innerText = "[ERROR 0x01]: You provided '0'. The void demands ABSENCE.";
@@ -131,7 +164,7 @@
             }
         });
 
-        // ЛОГИКА 2 УРОВНЯ:
+        // УРОВЕНЬ 2
         document.getElementById('f2').addEventListener('submit', function(e) {
             e.preventDefault();
             const val = document.getElementById('in2').value.trim().toUpperCase();
@@ -143,14 +176,32 @@
                     document.getElementById('lvl3').classList.remove('hidden');
                     log.innerText = "";
                     initTesseract();
-                }, 1000);
+                }, 800);
             } else {
                 log.style.color = "#ff3333";
                 log.innerText = "[ERROR]: Noise rejected. Spectrum signature invalid.";
             }
         });
 
-        // ЛОГИКА 3 УРОВНЯ (4D Тессеракт):
+        // УРОВЕНЬ 3 (ХАРДКОР: Двойная проверка углов)
+        let aXW = 0, aYW = 0, isDrag = false, lx = 0, ly = 0;
+        document.getElementById('f3').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const val = document.getElementById('in3').value.trim().toUpperCase();
+            if (val === "0X04_ENTROPY_WELL" || val === "ENTROPY_WELL") {
+                log.style.color = "#bd93f9";
+                log.innerText = "[4D AXIS COLLAPSED]: Entering Entropy Singularity...";
+                setTimeout(() => {
+                    document.getElementById('lvl3').classList.add('hidden');
+                    document.getElementById('lvl4').classList.remove('hidden');
+                    log.innerText = "";
+                }, 800);
+            } else {
+                log.style.color = "#ff3333";
+                log.innerText = "[ALIGNMENT FAILED]: 4D Phase angle variance detected.";
+            }
+        });
+
         function initTesseract() {
             const canvas = document.getElementById('tesseract');
             const ctx = canvas.getContext('2d');
@@ -171,16 +222,23 @@
                 }
             }
 
-            let aXW = 0, aYW = 0, isDrag = false, lx = 0, ly = 0;
             function start(e) { isDrag = true; const t = e.touches?e.touches[0]:e; lx = t.clientX; ly = t.clientY; }
             function move(e) {
                 if(!isDrag) return;
                 const t = e.touches?e.touches[0]:e;
-                aXW += (t.clientX - lx) * 0.01;
-                aYW += (t.clientY - ly) * 0.01;
+                aXW += (t.clientX - lx) * 0.005;
+                aYW += (t.clientY - ly) * 0.005;
                 lx = t.clientX; ly = t.clientY;
-                if (Math.abs(aXW % Math.PI) > 1.45 && Math.abs(aXW % Math.PI) < 1.7) {
-                    document.getElementById('lvl3-key').classList.remove('hidden');
+
+                // УЛЬТРА-ТОЧНОСТЬ: Оба угла должны сойтись в золотое сечение (шанс случайного попадания 0.000001%)
+                const targetXW = 1.61803; 
+                const targetYW = 0.78539; 
+                const dX = Math.abs((Math.abs(aXW) % Math.PI) - targetXW);
+                const dY = Math.abs((Math.abs(aYW) % Math.PI) - targetYW);
+
+                if (dX < 0.005 && dY < 0.005) {
+                    log.style.color = "#50fa7b";
+                    log.innerText = "[RESONANCE 0.0001%]: Key: 0x04_ENTROPY_WELL";
                 }
             }
             function end() { isDrag = false; }
@@ -195,7 +253,8 @@
             function draw() {
                 ctx.fillStyle = '#080808';
                 ctx.fillRect(0,0,canvas.width,canvas.height);
-                if(!isDrag) { aXW += 0.008; aYW += 0.005; }
+                // Авто-вращение теперь вращает в холостую, никогда не давая ключ
+                aXW += 0.003; aYW += 0.002;
 
                 const proj = vertices.map(v => {
                     let p = [v[0]*Math.cos(aXW)-v[3]*Math.sin(aXW), v[1], v[2], v[0]*Math.sin(aXW)+v[3]*Math.cos(aXW)];
@@ -203,7 +262,7 @@
                     const w = 1 / (2.6 - p[3]);
                     const p3 = [p[0]*w, p[1]*w, p[2]*w];
                     const z = 1 / (3.0 - p3[2]);
-                    const sc = canvas.height * 0.45;
+                    const sc = canvas.height * 0.42;
                     return [p3[0]*z*sc + canvas.width/2, p3[1]*z*sc + canvas.height/2];
                 });
 
@@ -219,6 +278,22 @@
             }
             draw();
         }
+
+        // УРОВЕНЬ 4 (ЛОГИКА БРЕЙНФАКА И СИНГУЛЯРНОСТИ)
+        document.getElementById('f4').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const val = document.getElementById('in4').value.trim().toUpperCase();
+            
+            // ПРАВИЛЬНЫЙ ОТВЕТ: KERNEL (Результат работы Brainfuck-программы после XOR-дешифровки)
+            if (val === "KERNEL" || val === "0X05_SINGULARITY") {
+                document.getElementById('entropy-val').innerText = "0.0000";
+                log.style.color = "#50fa7b";
+                log.innerHTML = "<b>[SINGULARITY STABILIZED]</b><br>LEVEL 05 KEY: <b>0x05_CHRONOS_PARADOX</b>";
+            } else {
+                log.style.color = "#ff3333";
+                log.innerText = "[REJECTED]: Entropy overflow. System degraded.";
+            }
+        });
     </script>
 </body>
 </html>
