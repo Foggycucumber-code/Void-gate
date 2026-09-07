@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBSERVER // GATEWAY 01</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background-color: #030303;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .terminal {
+            background: #080808;
+            border: 1px solid #00ff41;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            padding: 25px;
+            max-width: 500px;
+            width: 100%;
+            border-radius: 4px;
+        }
+        h1 { font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px dashed #00ff41; padding-bottom: 10px; }
+        p { font-size: 0.9rem; line-height: 1.5; color: #a0ffa0; }
+        input[type="text"] {
+            width: 100%;
+            background: #000;
+            border: 1px solid #00ff41;
+            color: #fff;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 1rem;
+            margin: 15px 0;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            background: #00ff41;
+            color: #000;
+            border: none;
+            padding: 10px;
+            font-weight: bold;
+            font-family: monospace;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover { background: #00cc33; }
+        #output {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            min-height: 40px;
+            line-height: 1.4;
+        }
+        .error { color: #ff3333; }
+        .success { color: #00ffff; text-shadow: 0 0 8px #00ffff; }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <h1>[ GATEWAY_01 // NULL_COLLAPSE ]</h1>
+        <p>EVALUATE THE CONDITION:<br><code>e^(i*pi) + 1 = ?</code></p>
+        <p style="color: #666; font-size: 0.8rem;">Warning: The portal detects observation weight.</p>
+        
+        <form id="puzzleForm">
+            <input type="text" id="userInput" placeholder="Awaiting observer input..." autocomplete="off">
+            <button type="submit">TRANSMIT TO VOID</button>
+        </form>
+
+        <div id="output"></div>
+    </div>
+
+    <script>
+        document.getElementById('puzzleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('userInput').value;
+            const out = document.getElementById('output');
+
+            if (input === "") {
+                // ПАРАДОКС: Проходит только абсолютная пустота (0 байт)
+                out.className = "success";
+                out.innerHTML = "[STATUS: UNLOCKED]<br><br>" +
+                                "Observation weight: 0.00g (Pure Void)<br>" +
+                                "LEVEL 2 CIPHER: <b>0xDEAD_QUANTUM_LEAP</b><br>" +
+                                "Instruction: Look for the signal where frequency equals zero.";
+            } else if (input.trim() === "0") {
+                out.className = "error";
+                out.innerHTML = "[ERROR 0x01]: You provided the number '0'. A symbol is still substance. The singularity demands ABSENCE.";
+            } else {
+                out.className = "error";
+                out.innerHTML = "[REJECTED]: Waveform collapsed. False observer detected.";
+            }
+        });
+    </script>
+</body>
+  </html>
