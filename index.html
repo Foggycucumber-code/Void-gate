@@ -86,7 +86,11 @@
             border-top: 1px solid #222;
             padding-top: 8px;
         }
-        .glitch-lock { border-color: #ff0055 !important; color: #ff0055 !important; box-shadow: 0 0 40px rgba(255, 0, 85, 0.5) !important; }
+        .glitch-lock { 
+            border-color: #ff0055 !important; 
+            color: #ff0055 !important; 
+            box-shadow: 0 0 40px rgba(255, 0, 85, 0.5) !important; 
+        }
         .whiteout { background: #fff !important; color: #000 !important; box-shadow: 0 0 50px #fff !important; }
     </style>
 </head>
@@ -126,11 +130,12 @@
     <script src="visuals.js"></script>
     <script src="database.js"></script>
 
-    <!-- ОСНОВНОЙ ДВИЖОК -->
+    <!-- ОСНОВНОЙ ДВИЖОК С ЭНЕРГОНЕЗАВИСИМОЙ ПАМЯТЬЮ -->
     <script>
         let currentTier = 1;
-        let strikes = 3;
+        let strikes = parseInt(localStorage.getItem('__void_strikes') || "3");
         let isLocked = false;
+        let lockTimer = null;
 
         const terminalBox = document.getElementById('terminal-box');
         const epochTag = document.getElementById('epoch-tag');
@@ -147,7 +152,23 @@
         const hexBox = document.getElementById('hex-box');
         const canvas = document.getElementById('main-canvas');
 
+        // ПРОВЕРКА СОХРАНЕННОЙ БЛОКИРОВКИ ПРИ ЗАГРУЗКЕ
+        function checkPersistentLock() {
+            const lockUntil = parseInt(localStorage.getItem('__void_lock_until') || "0");
+            const now = Date.now();
+            if (lockUntil > now) {
+                const remainingSecs = Math.ceil((lockUntil - now) / 1000);
+                triggerLockout("PERSISTENT DECOHERENCE ACTIVE. NO ESCAPE VIA RELOAD.", remainingSecs);
+                return true;
+            } else {
+                localStorage.removeItem('__void_lock_until');
+                return false;
+            }
+        }
+
         function loadTier(tNum) {
+            if (checkPersistentLock()) return;
+
             currentTier = tNum;
             tierCounter.innerText = `TIER: ${String(tNum).padStart(3, '0')} / 133`;
             strikesTag.innerText = `ATTEMPTS: ${strikes} / 3`;
@@ -188,7 +209,8 @@
         }
 
         function handleValidation() {
-            if (isLocked) return;
+            if (isLocked || checkPersistentLock()) return;
+
             const val = passInput.value.trim().toUpperCase();
             const t = window.MASTER_DB[currentTier];
             if (!t) return;
@@ -196,7 +218,8 @@
             const HONEYPOTS = ["PASSWORD", "ADMIN", "CICADA", "CICADA3301", "FLAG", "ROOT", "TEST"];
             if (HONEYPOTS.includes(val)) {
                 strikes = 0;
-                triggerLockout("HONEYPOT TRIGGERED. PROGRESS CORRUPTED.");
+                localStorage.setItem('__void_strikes', "0");
+                triggerLockout("HONEYPOT TRIGGERED. PROGRESS CORRUPTED.", 300);
                 return;
             }
 
@@ -211,8 +234,11 @@
             }
 
             if (correct) {
+                strikes = 3;
+                localStorage.setItem('__void_strikes', "3");
+                localStorage.removeItem('__void_lock_until');
+
                 if (currentTier === 133) {
-                    // ТРИУМФ 1-ГО ТОМА
                     if (window.stopVisuals) window.stopVisuals();
                     document.body.classList.add('whiteout');
                     terminalBox.innerHTML = `
@@ -233,7 +259,6 @@
                     return;
                 }
 
-                strikes = 3;
                 log.style.color = "#50fa7b";
                 log.innerText = `[SUCCESS]: Tier ${currentTier} Cleared. Decrypting Tier ${currentTier + 1}...`;
                 setTimeout(() => {
@@ -241,9 +266,10 @@
                 }, 350);
             } else {
                 strikes--;
+                localStorage.setItem('__void_strikes', String(strikes));
                 strikesTag.innerText = `ATTEMPTS: ${strikes} / 3`;
                 if (strikes <= 0) {
-                    triggerLockout("QUANTUM DECOHERENCE: 3 STRIKES REACHED. LOCKDOWN ENGAGED.");
+                    triggerLockout("QUANTUM DECOHERENCE: 3 STRIKES REACHED. LOCKDOWN ENGAGED.", 300);
                 } else {
                     log.style.color = "#ff3333";
                     log.innerText = `[REJECTED]: Waveform collapsed. ${strikes} attempts remaining.`;
@@ -259,18 +285,33 @@
             }
         });
 
-        function triggerLockout(reason) {
+        // НЕПРОБИВАЕМЫЙ ЛОКДАУН (ПЕРСИСТЕНТНЫЙ ТАЙМЕР)
+        function triggerLockout(reason, durationSeconds) {
             isLocked = true;
             terminalBox.classList.add('glitch-lock');
-            let timeLeft = 300;
-            const timer = setInterval(() => {
-                timeLeft--;
+
+            const now = Date.now();
+            let lockUntil = parseInt(localStorage.getItem('__void_lock_until') || "0");
+            if (lockUntil <= now) {
+                lockUntil = now + (durationSeconds * 1000);
+                localStorage.setItem('__void_lock_until', String(lockUntil));
+            }
+
+            if (lockTimer) clearInterval(lockTimer);
+
+            lockTimer = setInterval(() => {
+                const currentNow = Date.now();
+                const remaining = Math.max(0, Math.ceil((lockUntil - currentNow) / 1000));
+                
                 log.style.color = "#ff0055";
-                log.innerHTML = `<b>[SYSTEM LOCKED]</b><br>${reason}<br>COOLDOWN: ${timeLeft}s`;
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
+                log.innerHTML = `<b>[SYSTEM LOCKED]</b><br>${reason}<br>COOLDOWN: ${remaining}s<br><span style="font-size:0.7rem; color:#888;">Lock persists across reloads.</span>`;
+
+                if (remaining <= 0) {
+                    clearInterval(lockTimer);
                     isLocked = false;
                     strikes = 3;
+                    localStorage.setItem('__void_strikes', "3");
+                    localStorage.removeItem('__void_lock_until');
                     terminalBox.classList.remove('glitch-lock');
                     loadTier(1);
                 }
@@ -278,7 +319,9 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            if (window.MASTER_DB) loadTier(1);
+            if (!checkPersistentLock() && window.MASTER_DB) {
+                loadTier(1);
+            }
         });
     </script>
 </body>
