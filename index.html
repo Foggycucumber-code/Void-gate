@@ -16,7 +16,7 @@
             min-height: 100vh;
             padding: 15px;
             overflow-x: hidden;
-            transition: color 0.5s ease;
+            transition: color 0.4s ease;
         }
         .terminal {
             background: #060606;
@@ -58,8 +58,9 @@
             display: inline-block;
             text-decoration: none;
             letter-spacing: 1px;
+            user-select: none;
         }
-        button:active, .btn:active { opacity: 0.8; }
+        button:active, .btn:active { transform: scale(0.98); opacity: 0.85; }
         #log { margin-top: 15px; font-size: 0.85rem; min-height: 25px; line-height: 1.4; }
         .hidden { display: none !important; }
         
@@ -91,9 +92,7 @@
             border-color: #ff0055 !important;
             color: #ff0055 !important;
             box-shadow: 0 0 40px rgba(255, 0, 85, 0.5) !important;
-            animation: shake 0.2s infinite;
         }
-        @keyframes shake { 0%{transform: translate(1px, 1px)} 50%{transform: translate(-1px, -2px)} 100%{transform: translate(1px, 0)} }
     </style>
 </head>
 <body>
@@ -106,7 +105,7 @@
 
         <div id="audio-box" class="hidden">
             <audio controls src="anomaly.wav" style="width: 100%; margin: 10px 0;"></audio><br>
-            <a href="anomaly.wav" download="anomaly.wav" class="btn" style="background:#00e5ff; margin-bottom:15px;">DOWNLOAD WAV STREAM</a>
+            <a href="anomaly.wav" download="anomaly.wav" class="btn" style="background:#00e5ff; margin-bottom:15px; color:#000;">DOWNLOAD WAV STREAM</a>
         </div>
 
         <div id="hex-box" class="hex-dump hidden"></div>
@@ -114,9 +113,9 @@
         <p id="task-desc">EVALUATE THE IDENTITY:<br><code>e<sup>iπ</sup> + 1 = ?</code></p>
         <p id="sub-desc" class="quote">"The portal detects observation weight. Bring no substance."</p>
 
-        <form id="master-form">
+        <form id="master-form" onsubmit="return false;">
             <input type="text" id="pass-input" placeholder="Awaiting observer input..." autocomplete="off">
-            <button type="submit" id="submit-btn">TRANSMIT TO VOID</button>
+            <button type="button" id="submit-btn">TRANSMIT TO VOID</button>
         </form>
 
         <div id="log"></div>
@@ -129,91 +128,90 @@
     </div>
 
     <script>
-        // MASTER DATABASE: EPOCH I [001-019], EPOCH II [020-038], EPOCH III [039-057], EPOCH IV [058-076]
         const MASTER_TIERS = {
             // --- EPOCH I [001-019] ---
-            1: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 001 // NULL_COLLAPSE ]", task: "EVALUATE THE IDENTITY:<br><code>e<sup>iπ</sup> + 1 = ?</code>", sub: "The portal detects observation weight. Bring no substance.", color: "#00ff41", sol: [""] },
-            2: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 002 // ZERO_FREQUENCY_BEACON ]", task: "The transmission arrived from beyond the event horizon.<br>Human ears hear chaos. The spectrum reveals the truth.", sub: "Deconstruct frequency spectrum. Extract key.", color: "#00e5ff", audio: true, sol: ["0X03_TESSERACT", "TESSERACT"] },
-            3: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 003 // TESSERACT_TOPOLOGY ]", task: "Precision 4D Alignment Required: XW ⊥ YW [Tolerance: ±0.00001 rad]", sub: "\"Umbra in quattuor dimensionibus non est nihil.\"", color: "#bd93f9", canvas: "tesseract", sol: ["0X04_ENTROPY_WELL", "ENTROPY_WELL"] },
-            4: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 004 // SINGULARITY_EVENT_HORIZON ]", task: "Accretion disk memory decay. Reverse XOR 0x5A transformation.<br>Execute the underlying Turing logic.", sub: "Turing machine memory dump captured.", color: "#ff5555", canvas: "blackhole", hex: "[XOR_MASK: 0x5A]\n71 7E 77 74 74 74 74 74 74 74 74 38 7B 77 77 77 77 77 77 77 77 74 74 74 74 74 74 74 74 74 38 77 77 77 77 77 77 77 77 74 74 74 74 74 74 74 74 74 74 74 38 7B 7B 7B 77 74 74 74 74 74 74 74 74 38 7B 7B 7B 7B 77 74 74 74 74 74 74 74 74 74 39 39 39 39 39 39 39 70 38 76 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 70", sol: ["KERNEL", "0X05_SINGULARITY"] },
-            5: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 005 // CHRONOS_DILATION ]", task: "Calculate proper time factor γ at radius <code>r = 1.5 r<sub>s</sub></code>.<br><code>γ = (1 - r<sub>s</sub>/r)<sup>-1/2</sup></code>.", sub: "Compute exact square root value to 7 decimal digits.", color: "#ffb86c", sol: ["1.7320508", "SQRT(3)", "SQRT3"] },
-            6: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 006 // PLANCK_DISCRETIZATION ]", task: "Spacetime dissolves into quantum foam at Wheeler scale.<br><code>l<sub>p</sub> = √(ħG / c³)</code>.", sub: "Input standard metric Planck length exponent format [X.XXXE-XX].", color: "#50fa7b", sol: ["1.616255E-35", "1.616E-35", "PLANCK_LENGTH"] },
-            7: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 007 // LANDAUER_BOUND ]", task: "Erasing one classical bit of entropy dissipates minimum heat.<br><code>ΔQ = k<sub>B</sub> · T · ln(2)</code>.", sub: "Enter the fundamental thermodynamic information law.", color: "#f1fa8c", sol: ["LANDAUER", "LANDAUER_LIMIT", "LANDAUER_PRINCIPLE"] },
-            8: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 008 // THE SILENT ARCHITECT ]", task: "The Creator stands on the shore of dying light.<br>Trace the uncompressed silhouette. Extract the hidden spectrum.", sub: "\"His garment holds the hex. His gaze holds the horizon.\"", color: "#8be9fd", sol: ["WANDERER_AT_EVENT_HORIZON", "SILENT_ARCHITECT"] },
-            9: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 009 // VOYNICH_FREQUENCY_MATRIX ]", task: "Unsolved botanical folio 0x57R. Entropy equals 4.12 bits/glyph.<br>Extract dominant bigram vector.", sub: "Analyze EVA transcription index for the hidden zodiac root.", color: "#ff79c6", sol: ["EVA_OR_TAURUS", "TAURUS", "FOLIO_57R"] },
-            10: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 010 // WHEELER_RETROCAUSALITY ]", task: "Delayed-choice quantum erasure confirms the present alters the past.<br>A photon chooses its path after passage.", sub: "Input the command to collapse past trajectories.", color: "#bd93f9", sol: ["ERASE_THE_PAST", "DELAYED_CHOICE"] },
-            11: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 011 // BEKENSTEIN_HAWKING_BOUND ]", task: "Maximum information content of a spatial region is bounded by its area.<br><code>S = (c³ k A) / (4 G ħ)</code>.", sub: "Input geometric entropy coefficient [A / 4G].", color: "#ff5555", sol: ["A_OVER_4G", "A/4G", "BEKENSTEIN_BOUND"] },
-            12: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 012 // FERMI_DRAKE_NULL_FILTER ]", task: "Where is the cosmic choir? Drake equation evaluates to zero.<br>Identify the terminal evolutionary barrier.", sub: "\"The Great Silence is an active defense mechanism.\"", color: "#ffb86c", sol: ["GREAT_FILTER_NULL", "GREAT_FILTER"] },
-            13: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 013 // POINCARE_RECURRENCE_CYCLE ]", task: "An isolated thermodynamic system returns to its initial microstate.<br>Recurrence time: <code>T ~ exp(S / k<sub>B</sub>)</code>.", sub: "Enter the cosmic recurrence exponent magnitude.", color: "#50fa7b", sol: ["10_POW_10_POW_100", "POINCARE_RECURRENCE"] },
-            14: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 014 // DIRAC_SEA_ANNIHILATION ]", task: "Infinite negative energy states are occupied.<br>A quantum fluctuation creates an electron-positron hole.", sub: "Identify the vacant negative energy state.", color: "#f1fa8c", sol: ["ANTIMATTER_HOLE", "POSITRON_HOLE", "DIRAC_SEA"] },
-            15: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 015 // CASIMIR_VACUUM_PRESSURE ]", task: "Two uncharged conducting plates in vacuum experience attraction.<br><code>F/A = -(π² ħ c) / (240 d⁴)</code>.", sub: "What state of energy density manifests between the boundaries?", color: "#8be9fd", sol: ["NEGATIVE_PRESSURE", "NEGATIVE_ENERGY", "CASIMIR_EFFECT"] },
-            16: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 016 // SCHWARZSCHILD_METRIC_COLLAPSE ]", task: "Spacetime metric singularity: <code>g<sub>00</sub> = -(1 - 2GM / rc²)</code>.<br>Collapse occurs when r reaches critical radius.", sub: "Input the exact algebraic formula for r_s.", color: "#ff79c6", sol: ["2GM_OVER_C_SQUARED", "2GM/C^2", "SCHWARZSCHILD_RADIUS"] },
-            17: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 017 // TACHYONIC_CHERENKOV_CONE ]", task: "Hypothetical field with imaginary mass: <code>m² < 0</code>.<br>Velocity exceeds c, creating vacuum radiation cone.", sub: "Enter the tachyonic dispersion state.", color: "#bd93f9", sol: ["SUPERLUMINAL_IMAGINARY", "TACHYON_FIELD"] },
-            18: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 018 // TSIRELSON_QUANTUM_BOUND ]", task: "Classical correlation max = 2. Quantum CHSH inequality max = 2√2.<br>No physical theory can exceed this correlation.", sub: "Input the name of this absolute quantum ceiling.", color: "#ff5555", sol: ["TSIRELSON_BOUND", "TSIRELSON"] },
-            19: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 019 // ER_EPR_FINAL_BRIDGE ]", task: "CONVERGENCE OF EPOCH I:<br>Wormhole geometry (ER) equals Quantum Entanglement (EPR).<br>Spacetime fabric is woven from entangled qubits.", sub: "Input the grand gravitational-quantum identity to unlock Epoch II.", color: "#ffffff", sol: ["WORMHOLE_IS_ENTANGLEMENT", "ER=EPR", "ER_EQUALS_EPR"] },
+            1: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 001 // NULL_COLLAPSE ]", task: "EVALUATE THE IDENTITY:<br><code>e<sup>iπ</sup> + 1 = ?</code>", sub: "The portal detects observation weight. Bring no substance.", color: "#00ff41", btnText: "TRANSMIT TO VOID", sol: [""] },
+            2: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 002 // ZERO_FREQUENCY_BEACON ]", task: "The transmission arrived from beyond the event horizon.<br>Human ears hear chaos. The spectrum reveals the truth.", sub: "Deconstruct frequency spectrum. Extract key.", color: "#00e5ff", btnText: "DECODE SIGNAL", audio: true, sol: ["0X03_TESSERACT", "TESSERACT"] },
+            3: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 003 // TESSERACT_TOPOLOGY ]", task: "Precision 4D Alignment Required: XW ⊥ YW [Tolerance: ±0.00001 rad]", sub: "\"Umbra in quattuor dimensionibus non est nihil.\"", color: "#bd93f9", btnText: "STABILIZE 4D AXIS", canvas: "tesseract", sol: ["0X04_ENTROPY_WELL", "ENTROPY_WELL"] },
+            4: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 004 // SINGULARITY_EVENT_HORIZON ]", task: "Accretion disk memory decay. Reverse XOR 0x5A transformation.<br>Execute the underlying Turing logic.", sub: "Turing machine memory dump captured.", color: "#ff5555", btnText: "STABILIZE SINGULARITY", canvas: "blackhole", hex: "[XOR_MASK: 0x5A]\n71 7E 77 74 74 74 74 74 74 74 74 38 7B 77 77 77 77 77 77 77 77 74 74 74 74 74 74 74 74 74 38 77 77 77 77 77 77 77 77 74 74 74 74 74 74 74 74 74 74 74 38 7B 7B 7B 77 74 74 74 74 74 74 74 74 38 7B 7B 7B 7B 77 74 74 74 74 74 74 74 74 74 39 39 39 39 39 39 39 70 38 76 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 70", sol: ["KERNEL", "0X05_SINGULARITY"] },
+            5: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 005 // CHRONOS_DILATION ]", task: "Calculate proper time factor γ at radius <code>r = 1.5 r<sub>s</sub></code>.<br><code>γ = (1 - r<sub>s</sub>/r)<sup>-1/2</sup></code>.", sub: "Compute exact square root value to 7 decimal digits.", color: "#ffb86c", btnText: "CALIBRATE TIMELINE", sol: ["1.7320508", "SQRT(3)", "SQRT3"] },
+            6: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 006 // PLANCK_DISCRETIZATION ]", task: "Spacetime dissolves into quantum foam at Wheeler scale.<br><code>l<sub>p</sub> = √(ħG / c³)</code>.", sub: "Input standard metric Planck length exponent format [X.XXXE-XX].", color: "#50fa7b", btnText: "DISCRETIZE SPACE", sol: ["1.616255E-35", "1.616E-35", "PLANCK_LENGTH"] },
+            7: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 007 // LANDAUER_BOUND ]", task: "Erasing one classical bit of entropy dissipates minimum heat.<br><code>ΔQ = k<sub>B</sub> · T · ln(2)</code>.", sub: "Enter the fundamental thermodynamic information law.", color: "#f1fa8c", btnText: "DISSIPATE HEAT", sol: ["LANDAUER", "LANDAUER_LIMIT", "LANDAUER_PRINCIPLE"] },
+            8: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 008 // THE SILENT ARCHITECT ]", task: "The Creator stands on the shore of dying light.<br>Trace the uncompressed silhouette. Extract the hidden spectrum.", sub: "\"His garment holds the hex. His gaze holds the horizon.\"", color: "#8be9fd", btnText: "IDENTIFY OBSERVER", sol: ["WANDERER_AT_EVENT_HORIZON", "SILENT_ARCHITECT"] },
+            9: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 009 // VOYNICH_FREQUENCY_MATRIX ]", task: "Unsolved botanical folio 0x57R. Entropy equals 4.12 bits/glyph.<br>Extract dominant bigram vector.", sub: "Analyze EVA transcription index for the hidden zodiac root.", color: "#ff79c6", btnText: "DECODE FOLIO", sol: ["EVA_OR_TAURUS", "TAURUS", "FOLIO_57R"] },
+            10: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 010 // WHEELER_RETROCAUSALITY ]", task: "Delayed-choice quantum erasure confirms the present alters the past.<br>A photon chooses its path after passage.", sub: "Input the command to collapse past trajectories.", color: "#bd93f9", btnText: "ERASE PAST", sol: ["ERASE_THE_PAST", "DELAYED_CHOICE"] },
+            11: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 011 // BEKENSTEIN_HAWKING_BOUND ]", task: "Maximum information content of a spatial region is bounded by its area.<br><code>S = (c³ k A) / (4 G ħ)</code>.", sub: "Input geometric entropy coefficient [A / 4G].", color: "#ff5555", btnText: "COMPUTE BOUND", sol: ["A_OVER_4G", "A/4G", "BEKENSTEIN_BOUND"] },
+            12: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 012 // FERMI_DRAKE_NULL_FILTER ]", task: "Where is the cosmic choir? Drake equation evaluates to zero.<br>Identify the terminal evolutionary barrier.", sub: "\"The Great Silence is an active defense mechanism.\"", color: "#ffb86c", btnText: "FILTER NOISE", sol: ["GREAT_FILTER_NULL", "GREAT_FILTER"] },
+            13: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 013 // POINCARE_RECURRENCE_CYCLE ]", task: "An isolated thermodynamic system returns to its initial microstate.<br>Recurrence time: <code>T ~ exp(S / k<sub>B</sub>)</code>.", sub: "Enter the cosmic recurrence exponent magnitude.", color: "#50fa7b", btnText: "RECURSE UNIVERSE", sol: ["10_POW_10_POW_100", "POINCARE_RECURRENCE"] },
+            14: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 014 // DIRAC_SEA_ANNIHILATION ]", task: "Infinite negative energy states are occupied.<br>A quantum fluctuation creates an electron-positron hole.", sub: "Identify the vacant negative energy state.", color: "#f1fa8c", btnText: "ANNIHILATE PAIR", sol: ["ANTIMATTER_HOLE", "POSITRON_HOLE", "DIRAC_SEA"] },
+            15: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 015 // CASIMIR_VACUUM_PRESSURE ]", task: "Two uncharged conducting plates in vacuum experience attraction.<br><code>F/A = -(π² ħ c) / (240 d⁴)</code>.", sub: "What state of energy density manifests between the boundaries?", color: "#8be9fd", btnText: "MEASURE VACUUM", sol: ["NEGATIVE_PRESSURE", "NEGATIVE_ENERGY", "CASIMIR_EFFECT"] },
+            16: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 016 // SCHWARZSCHILD_METRIC_COLLAPSE ]", task: "Spacetime metric singularity: <code>g<sub>00</sub> = -(1 - 2GM / rc²)</code>.<br>Collapse occurs when r reaches critical radius.", sub: "Input the exact algebraic formula for r_s.", color: "#ff79c6", btnText: "COLLAPSE RADIUS", sol: ["2GM_OVER_C_SQUARED", "2GM/C^2", "SCHWARZSCHILD_RADIUS"] },
+            17: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 017 // TACHYONIC_CHERENKOV_CONE ]", task: "Hypothetical field with imaginary mass: <code>m² < 0</code>.<br>Velocity exceeds c, creating vacuum radiation cone.", sub: "Enter the tachyonic dispersion state.", color: "#bd93f9", btnText: "EXCEED LIGHT", sol: ["SUPERLUMINAL_IMAGINARY", "TACHYON_FIELD"] },
+            18: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 018 // TSIRELSON_QUANTUM_BOUND ]", task: "Classical correlation max = 2. Quantum CHSH inequality max = 2√2.<br>No physical theory can exceed this correlation.", sub: "Input the name of this absolute quantum ceiling.", color: "#ff5555", btnText: "CLAMP CORRELATION", sol: ["TSIRELSON_BOUND", "TSIRELSON"] },
+            19: { epoch: "EPOCH I // RELATIVISTIC SPACETIME", title: "[ TIER 019 // ER_EPR_FINAL_BRIDGE ]", task: "CONVERGENCE OF EPOCH I:<br>Wormhole geometry (ER) equals Quantum Entanglement (EPR).<br>Spacetime fabric is woven from entangled qubits.", sub: "Input the grand gravitational-quantum identity to unlock Epoch II.", color: "#ffffff", btnText: "BRIDGE REALITIES", sol: ["WORMHOLE_IS_ENTANGLEMENT", "ER=EPR", "ER_EQUALS_EPR"] },
 
             // --- EPOCH II [020-038] ---
-            20: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 020 // BLOCH_SPHERE_SUPERPOSITION ]", task: "Qubit state |ψ⟩ = cos(θ/2)|0⟩ + e<sup>iφ</sup>sin(θ/2)|1⟩.<br>Apply Hadamard gate: <code>H|0⟩ = (|0⟩ + |1⟩)/√2</code>.", sub: "Input canonical notation for state |+⟩.", color: "#00e5ff", canvas: "quantum", sol: ["HADAMARD_STATE_PLUS", "|+>", "PLUS_STATE", "1/SQRT(2)"] },
-            21: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 021 // MAXIMAL_BELL_STATE ]", task: "Maximally entangled pair: <code>|Φ⁺⟩ = (|00⟩ + |11⟩) / √2</code>.<br>Reduced density matrix trace: <code>Tr(ρ<sub>A</sub>²) = 1/2</code>.", sub: "Identify state of entanglement entropy.", color: "#8be9fd", canvas: "quantum", sol: ["MAXIMAL_ENTANGLEMENT", "BELL_STATE", "EBIT"] },
-            22: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 022 // DOUBLE_SLIT_COLLAPSE ]", task: "Which-way detector placed at slit B.<br>Interference fringe visibility: <code>V = (I<sub>max</sub> - I<sub>min</sub>) / (I<sub>max</sub> + I<sub>min</sub>) → 0</code>.", sub: "What action destroys wave coherence?", color: "#50fa7b", canvas: "quantum", sol: ["OBSERVER_DESTROYS_INTERFERENCE", "MEASUREMENT_COLLAPSE", "OBSERVATION"] },
-            23: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 023 // STERN_GERLACH_NON_COMMUTATION ]", task: "Incompatible spin operators along orthogonal axes:<br><code>[Ŝ<sub>x</sub>, Ŝ<sub>y</sub>] = iħ Ŝ<sub>z</sub></code>.", sub: "Enter the fundamental algebraic property of quantum spin.", color: "#ff79c6", sol: ["NON_COMMUTATIVE_SPIN", "COMMUTATOR_NON_ZERO", "IHBAR_SZ"] },
-            24: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 024 // QUANTUM_ZENO_FREEZING ]", task: "Continuous projection measurements freeze wavefunction evolution.<br><code>P(t) = [cos(Ω t / N)]<sup>2N</sup> → 1</code> as N → ∞.", sub: "Name this observed quantum stasis paradox.", color: "#f1fa8c", sol: ["QUANTUM_ZENO_FREEZE", "ZENO_EFFECT", "QUANTUM_ZENO"] },
-            25: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 025 // MAJORANA_ZERO_MODE ]", task: "Topological superconductor wire boundary.<br>Fermion operator is identical to its own adjoint: <code>γ = γ<sup>†</sup></code>.", sub: "Identify this self-conjugate quasiparticle mode.", color: "#bd93f9", sol: ["SELF_CONJUGATE_FERMION", "MAJORANA_ZERO_MODE", "MAJORANA"] },
-            26: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 026 // AHARONOV_BOHM_PHASE ]", task: "Magnetic field B = 0 outside solenoid, but vector potential A ≠ 0.<br>Phase shift: <code>Δφ = (q / ħ) ∮ A · dr = q Φ / ħ</code>.", sub: "Identify non-local electromagnetic potential.", color: "#00e5ff", sol: ["NON_LOCAL_VECTOR_POTENTIAL", "AHARONOV_BOHM", "VECTOR_POTENTIAL"] },
-            27: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 027 // DEUTSCH_JOZSA_ORACLE ]", task: "Determine whether boolean function f(x) is constant or balanced in 1 query.<br><code>|ψ<sub>final</sub>⟩ = Σ (-1)<sup>f(x)</sup> |x⟩</code>.", sub: "Enter the decision dichotomy of the Deutsch-Jozsa algorithm.", color: "#8be9fd", sol: ["CONSTANT_VS_BALANCED", "DEUTSCH_JOZSA", "BALANCED_OR_CONSTANT"] },
-            28: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 028 // SHOR_MODULAR_PERIOD_QFT ]", task: "Find order r such that <code>a<sup>r</sup> ≡ 1 (mod N)</code>.<br>Quantum Fourier Transform maps period to peak amplitudes.", sub: "Name the core sub-routine breaking RSA cryptography.", color: "#ff5555", sol: ["QFT_PERIOD_FINDING", "SHOR_ALGORITHM", "ORDER_FINDING"] },
-            29: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 029 // GROVER_AMPLITUDE_DIFFUSION ]", task: "Search unsorted database of N items in O(√N) steps.<br>Diffusion operator: <code>D = 2|s⟩⟨s| - I</code>.", sub: "Identify geometric mechanism multiplying target probability.", color: "#ffb86c", sol: ["AMPLITUDE_INVERSION", "AMPLITUDE_AMPLIFICATION", "GROVER_DIFFUSION"] },
-            30: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 030 // QUANTUM_TELEPORTATION_PROTOCOL ]", task: "Transmission of unknown state |ψ⟩ using 1 shared Bell pair and 2 classical bits.<br>State is destroyed at origin.", sub: "What fundamental theorem prevents copying quantum states?", color: "#50fa7b", sol: ["NO_CLONING_PRESERVED", "NO_CLONING_THEOREM", "NO_CLONING"] },
-            31: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 031 // MESOSCOPIC_CAT_DECOHERENCE ]", task: "Superposition |ψ⟩ = (|α⟩ + |-α⟩)/√2.<br>Decoherence timescale: <code>τ<sub>D</sub> = τ<sub>rel</sub> / |2α|²</code>.", sub: "What environmental parameter destroys macroscopic superposition?", color: "#f1fa8c", sol: ["DECOHERENCE_RATE", "DECOHERENCE_TIME", "ENVIRONMENTAL_ENTANGLEMENT"] },
-            32: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 032 // KRAUS_OPERATOR_SUM ]", task: "Open quantum system map: <code>ρ' = Σ K<sub>k</sub> ρ K<sub>k</sub><sup>†</sup></code>.<br>Normalization constraint: <code>Σ K<sub>k</sub><sup>†</sup> K<sub>k</sub> = I</code>.", sub: "What mathematical property characterizes physical quantum channels?", color: "#ff79c6", sol: ["COMPLETE_POSITIVITY", "CPTP_MAP", "KRAUS_REPRESENTATION"] },
-            33: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 033 // TOPOLOGICAL_ANYON_BRAIDING ]", task: "2+1D space allows fractional statistics. Exchange operator: <code>σ<sub>1</sub> σ<sub>2</sub> σ<sub>1</sub> = σ<sub>2</sub> σ<sub>1</sub> σ<sub>2</sub></code>.<br>Wavefunction acquires non-Abelian unitary matrix.", sub: "Input the mathematical operation on topological world-lines.", color: "#bd93f9", sol: ["NON_ABELIAN_BRAIDING", "ANYON_BRAID", "BRAID_GROUP"] },
-            34: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 034 // EIGENSTATE_THERMALIZATION ]", task: "Isolated quantum many-body system acts as its own bath.<br>Matrix element: <code>⟨E<sub>m</sub>|O|E<sub>n</sub>⟩ = O(Ē) δ<sub>mn</sub> + e<sup>-S(Ē)/2</sup> f(Ē, ω) R<sub>mn</sub></code>.", sub: "Name this quantum statistical chaos hypothesis.", color: "#ff5555", sol: ["QUANTUM_ERGODICITY", "ETH_HYPOTHESIS", "EIGENSTATE_THERMALIZATION"] },
-            35: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 035 // WIGNER_FRIEND_ANTINOMY ]", task: "Observer inside lab sees definite outcome. Observer outside sees entangled superposition.<br>Quantum mechanics admits no single observer-independent reality.", sub: "Identify the epistemological crisis of quantum facts.", color: "#ffb86c", sol: ["SUBJECTIVE_FACTS_OF_WORLD", "WIGNER_FRIEND", "RELATIONAL_QUANTUM"] },
-            36: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 036 // KITAEV_TORIC_CODE_STABILIZER ]", task: "Topological quantum memory on torus.<br>Stabilizers: <code>A<sub>s</sub> = ∏<sub>j∈s</sub> σ<sub>j</sub><sup>x</sup></code>, <code>B<sub>p</sub> = ∏<sub>j∈p</sub> σ<sub>j</sub><sup>z</sup></code>.<br>Ground state degeneracy: <code>4<sup>g</sup></code>.", sub: "What geometric invariant protects encoded logical qubits?", color: "#50fa7b", sol: ["TOPOLOGICAL_PROTECTION", "TORIC_CODE", "SURFACE_CODE"] },
-            37: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 037 // ADS_CFT_BULK_BOUNDARY ]", task: "Anti-de Sitter gravity in d+1 dimensions is dual to Conformal Field Theory on d-dimensional boundary.<br><code>Z<sub>grav</sub>[φ<sub>0</sub>] = ⟨exp(∫ φ<sub>0</sub> O)⟩<sub>CFT</sub></code>.", sub: "Name the foundational holographic duality.", color: "#00e5ff", sol: ["BULK_BOUNDARY_DUALITY", "ADS_CFT", "MALDACENA_DUALITY"] },
-            38: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 038 // RYU_TAKAYANAGI_ENTROPY_GEOMETRY ]", task: "CONVERGENCE OF EPOCH II:<br>Holographic entanglement entropy equals minimal surface area in bulk:<br><code>S<sub>A</sub> = Area(γ<sub>A</sub>) / (4 G<sub>N</sub>)</code>.<br>Spacetime geometry emerges directly from quantum entanglement.", sub: "Input the master holographic entropy identity to unlock Epoch III.", color: "#ffffff", sol: ["GEOMETRY_FROM_ENTANGLEMENT", "RYU_TAKAYANAGI", "EMERGENT_SPACETIME"] },
+            20: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 020 // BLOCH_SPHERE_SUPERPOSITION ]", task: "Qubit state |ψ⟩ = cos(θ/2)|0⟩ + e<sup>iφ</sup>sin(θ/2)|1⟩.<br>Apply Hadamard gate: <code>H|0⟩ = (|0⟩ + |1⟩)/√2</code>.", sub: "Input canonical notation for state |+⟩.", color: "#00e5ff", btnText: "ROTATE QUBIT", canvas: "quantum", sol: ["HADAMARD_STATE_PLUS", "|+>", "PLUS_STATE", "1/SQRT(2)"] },
+            21: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 021 // MAXIMAL_BELL_STATE ]", task: "Maximally entangled pair: <code>|Φ⁺⟩ = (|00⟩ + |11⟩) / √2</code>.<br>Reduced density matrix trace: <code>Tr(ρ<sub>A</sub>²) = 1/2</code>.", sub: "Identify state of entanglement entropy.", color: "#8be9fd", btnText: "MEASURE ENTANGLEMENT", canvas: "quantum", sol: ["MAXIMAL_ENTANGLEMENT", "BELL_STATE", "EBIT"] },
+            22: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 022 // DOUBLE_SLIT_COLLAPSE ]", task: "Which-way detector placed at slit B.<br>Interference fringe visibility: <code>V = (I<sub>max</sub> - I<sub>min</sub>) / (I<sub>max</sub> + I<sub>min</sub>) → 0</code>.", sub: "What action destroys wave coherence?", color: "#50fa7b", btnText: "COLLAPSE PATTERN", canvas: "quantum", sol: ["OBSERVER_DESTROYS_INTERFERENCE", "MEASUREMENT_COLLAPSE", "OBSERVATION"] },
+            23: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 023 // STERN_GERLACH_NON_COMMUTATION ]", task: "Incompatible spin operators along orthogonal axes:<br><code>[Ŝ<sub>x</sub>, Ŝ<sub>y</sub>] = iħ Ŝ<sub>z</sub></code>.", sub: "Enter the fundamental algebraic property of quantum spin.", color: "#ff79c6", btnText: "COMMUTE OPERATORS", sol: ["NON_COMMUTATIVE_SPIN", "COMMUTATOR_NON_ZERO", "IHBAR_SZ"] },
+            24: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 024 // QUANTUM_ZENO_FREEZING ]", task: "Continuous projection measurements freeze wavefunction evolution.<br><code>P(t) = [cos(Ω t / N)]<sup>2N</sup> → 1</code> as N → ∞.", sub: "Name this observed quantum stasis paradox.", color: "#f1fa8c", btnText: "FREEZE STATE", sol: ["QUANTUM_ZENO_FREEZE", "ZENO_EFFECT", "QUANTUM_ZENO"] },
+            25: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 025 // MAJORANA_ZERO_MODE ]", task: "Topological superconductor wire boundary.<br>Fermion operator is identical to its own adjoint: <code>γ = γ<sup>†</sup></code>.", sub: "Identify this self-conjugate quasiparticle mode.", color: "#bd93f9", btnText: "BRAID FERMION", sol: ["SELF_CONJUGATE_FERMION", "MAJORANA_ZERO_MODE", "MAJORANA"] },
+            26: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 026 // AHARONOV_BOHM_PHASE ]", task: "Magnetic field B = 0 outside solenoid, but vector potential A ≠ 0.<br>Phase shift: <code>Δφ = (q / ħ) ∮ A · dr = q Φ / ħ</code>.", sub: "Identify non-local electromagnetic potential.", color: "#00e5ff", btnText: "SHIFT PHASE", sol: ["NON_LOCAL_VECTOR_POTENTIAL", "AHARONOV_BOHM", "VECTOR_POTENTIAL"] },
+            27: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 027 // DEUTSCH_JOZSA_ORACLE ]", task: "Determine whether boolean function f(x) is constant or balanced in 1 query.<br><code>|ψ<sub>final</sub>⟩ = Σ (-1)<sup>f(x)</sup> |x⟩</code>.", sub: "Enter the decision dichotomy of the Deutsch-Jozsa algorithm.", color: "#8be9fd", btnText: "QUERY ORACLE", sol: ["CONSTANT_VS_BALANCED", "DEUTSCH_JOZSA", "BALANCED_OR_CONSTANT"] },
+            28: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 028 // SHOR_MODULAR_PERIOD_QFT ]", task: "Find order r such that <code>a<sup>r</sup> ≡ 1 (mod N)</code>.<br>Quantum Fourier Transform maps period to peak amplitudes.", sub: "Name the core sub-routine breaking RSA cryptography.", color: "#ff5555", btnText: "FACTOR RSA", sol: ["QFT_PERIOD_FINDING", "SHOR_ALGORITHM", "ORDER_FINDING"] },
+            29: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 029 // GROVER_AMPLITUDE_DIFFUSION ]", task: "Search unsorted database of N items in O(√N) steps.<br>Diffusion operator: <code>D = 2|s⟩⟨s| - I</code>.", sub: "Identify geometric mechanism multiplying target probability.", color: "#ffb86c", btnText: "AMPLIFY PROBABILITY", sol: ["AMPLITUDE_INVERSION", "AMPLITUDE_AMPLIFICATION", "GROVER_DIFFUSION"] },
+            30: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 030 // QUANTUM_TELEPORTATION_PROTOCOL ]", task: "Transmission of unknown state |ψ⟩ using 1 shared Bell pair and 2 classical bits.<br>State is destroyed at origin.", sub: "What fundamental theorem prevents copying quantum states?", color: "#50fa7b", btnText: "TELEPORT STATE", sol: ["NO_CLONING_PRESERVED", "NO_CLONING_THEOREM", "NO_CLONING"] },
+            31: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 031 // MESOSCOPIC_CAT_DECOHERENCE ]", task: "Superposition |ψ⟩ = (|α⟩ + |-α⟩)/√2.<br>Decoherence timescale: <code>τ<sub>D</sub> = τ<sub>rel</sub> / |2α|²</code>.", sub: "What environmental parameter destroys macroscopic superposition?", color: "#f1fa8c", btnText: "OBSERVE BOX", sol: ["DECOHERENCE_RATE", "DECOHERENCE_TIME", "ENVIRONMENTAL_ENTANGLEMENT"] },
+            32: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 032 // KRAUS_OPERATOR_SUM ]", task: "Open quantum system map: <code>ρ' = Σ K<sub>k</sub> ρ K<sub>k</sub><sup>†</sup></code>.<br>Normalization constraint: <code>Σ K<sub>k</sub><sup>†</sup> K<sub>k</sub> = I</code>.", sub: "What mathematical property characterizes physical quantum channels?", color: "#ff79c6", btnText: "MAP CHANNEL", sol: ["COMPLETE_POSITIVITY", "CPTP_MAP", "KRAUS_REPRESENTATION"] },
+            33: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 033 // TOPOLOGICAL_ANYON_BRAIDING ]", task: "2+1D space allows fractional statistics. Exchange operator: <code>σ<sub>1</sub> σ<sub>2</sub> σ<sub>1</sub> = σ<sub>2</sub> σ<sub>1</sub> σ<sub>2</sub></code>.<br>Wavefunction acquires non-Abelian unitary matrix.", sub: "Input the mathematical operation on topological world-lines.", color: "#bd93f9", btnText: "BRAID WORLDLINES", sol: ["NON_ABELIAN_BRAIDING", "ANYON_BRAID", "BRAID_GROUP"] },
+            34: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 034 // EIGENSTATE_THERMALIZATION ]", task: "Isolated quantum many-body system acts as its own bath.<br>Matrix element: <code>⟨E<sub>m</sub>|O|E<sub>n</sub>⟩ = O(Ē) δ<sub>mn</sub> + e<sup>-S(Ē)/2</sup> f(Ē, ω) R<sub>mn</sub></code>.", sub: "Name this quantum statistical chaos hypothesis.", color: "#ff5555", btnText: "THERMALcompute", sol: ["QUANTUM_ERGODICITY", "ETH_HYPOTHESIS", "EIGENSTATE_THERMALIZATION"] },
+            35: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 035 // WIGNER_FRIEND_ANTINOMY ]", task: "Observer inside lab sees definite outcome. Observer outside sees entangled superposition.<br>Quantum mechanics admits no single observer-independent reality.", sub: "Identify the epistemological crisis of quantum facts.", color: "#ffb86c", btnText: "RECONCILE OBSERVERS", sol: ["SUBJECTIVE_FACTS_OF_WORLD", "WIGNER_FRIEND", "RELATIONAL_QUANTUM"] },
+            36: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 036 // KITAEV_TORIC_CODE_STABILIZER ]", task: "Topological quantum memory on torus.<br>Stabilizers: <code>A<sub>s</sub> = ∏<sub>j∈s</sub> σ<sub>j</sub><sup>x</sup></code>, <code>B<sub>p</sub> = ∏<sub>j∈p</sub> σ<sub>j</sub><sup>z</sup></code>.<br>Ground state degeneracy: <code>4<sup>g</sup></code>.", sub: "What geometric invariant protects encoded logical qubits?", color: "#50fa7b", btnText: "STABILIZE CODE", sol: ["TOPOLOGICAL_PROTECTION", "TORIC_CODE", "SURFACE_CODE"] },
+            37: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 037 // ADS_CFT_BULK_BOUNDARY ]", task: "Anti-de Sitter gravity in d+1 dimensions is dual to Conformal Field Theory on d-dimensional boundary.<br><code>Z<sub>grav</sub>[φ<sub>0</sub>] = ⟨exp(∫ φ<sub>0</sub> O)⟩<sub>CFT</sub></code>.", sub: "Name the foundational holographic duality.", color: "#00e5ff", btnText: "MAP BOUNDARY", sol: ["BULK_BOUNDARY_DUALITY", "ADS_CFT", "MALDACENA_DUALITY"] },
+            38: { epoch: "EPOCH II // QUANTUM NON-LOCALITY", title: "[ TIER 038 // RYU_TAKAYANAGI_ENTROPY_GEOMETRY ]", task: "CONVERGENCE OF EPOCH II:<br>Holographic entanglement entropy equals minimal surface area in bulk:<br><code>S<sub>A</sub> = Area(γ<sub>A</sub>) / (4 G<sub>N</sub>)</code>.<br>Spacetime geometry emerges directly from quantum entanglement.", sub: "Input the master holographic entropy identity to unlock Epoch III.", color: "#ffffff", btnText: "TRANSCEND QUANTUM", sol: ["GEOMETRY_FROM_ENTANGLEMENT", "RYU_TAKAYANAGI", "EMERGENT_SPACETIME"] },
 
             // --- EPOCH III [039-057] ---
-            39: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 039 // POINCARE_HYPERBOLIC_DISK ]", task: "Hyperbolic space metric: <code>ds² = 4(dx² + dy²) / (1 - x² - y²)²</code>.<br>Gaussian curvature is constant and negative.", sub: "Input the constant Gaussian curvature invariant [K = ?].", color: "#bd93f9", canvas: "hyperbolic", sol: ["NEGATIVE_CURVATURE", "GAUSSIAN_CURVATURE_MINUS_ONE", "-1", "K=-1"] },
-            40: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 040 // CALABI_YAU_COMPACTIFICATION ]", task: "6-dimensional Ricci-flat Kähler manifold in superstring theory.<br>Holonomy group SU(3), vanishing first Chern class: <code>c<sub>1</sub>(M) = 0</code>.", sub: "Identify the compactified geometric manifold type.", color: "#00e5ff", canvas: "hyperbolic", sol: ["RICCI_FLAT_SIX_MANIFOLD", "CALABI_YAU", "CALABI_YAU_MANIFOLD"] },
-            41: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 041 // KLEIN_BOTTLE_NON_ORIENTABILITY ]", task: "4D self-intersecting closed manifold with Euler characteristic χ = 0.<br>A single continuous boundaryless surface with no interior/exterior distinction.", sub: "Identify the global topological orientability status.", color: "#ff79c6", sol: ["NON_ORIENTABLE_SURFACE", "KLEIN_BOTTLE", "NON_ORIENTABLE"] },
-            42: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 042 // ALEXANDER_HORNED_SPHERE ]", task: "Topological embedding of 2-sphere S² into ℝ³ with wild Cantor boundary.<br>Exterior domain is not simply connected: <code>π₁(ℝ³ \\ X) ≠ 0</code>.", sub: "Name this pathology in wild topology.", color: "#ff5555", sol: ["WILD_TOPOLOGY_NON_SMOOTH", "ALEXANDER_HORNED_SPHERE", "WILD_SPHERE"] },
-            43: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 043 // MANDELBROT_BOUNDARY_FRACTAL ]", task: "Complex recurrence: <code>z<sub>n+1</sub> = z<sub>n</sub>² + c</code>.<br>Boundary ∂M is connected, self-similar, with Hausdorff dimension exactly equal to 2.", sub: "Enter the Hausdorff fractal dimension of the Mandelbrot boundary.", color: "#f1fa8c", sol: ["HAUSDORFF_DIMENSION_TWO", "DIMENSION_2", "2", "HAUSDORFF_2"] },
-            44: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 044 // MILNOR_EXOTIC_SEVEN_SPHERES ]", task: "Smooth manifolds homeomorphic to S⁷ but not diffeomorphic.<br>Differential topology admits exactly 28 distinct smooth structures.", sub: "Input the invariant number of exotic differential structures on S⁷.", color: "#50fa7b", sol: ["MILNOR_EXOTIC_SPHERE_28", "28", "EXOTIC_SPHERES_28"] },
-            45: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 045 // HILBERT_INFINITE_CUBE ]", task: "Countable topological product: <code>I<sup>ω</sup> = ∏<sub>n=1</sub><sup>∞</sup> [0, 1/n]</code>.<br>Compact, connected, metrizable infinite-dimensional space.", sub: "Identify the canonical infinite-dimensional topological cube.", color: "#8be9fd", sol: ["INFINITE_DIMENSIONAL_HILBERT_CUBE", "HILBERT_CUBE", "TOPOLOGICAL_HILBERT_CUBE"] },
-            46: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 046 // BANACH_TARSKI_PARADOX_AC ]", task: "Decomposition of solid ball B³ into 5 non-measurable sets.<br>Reassembly yields two identical balls of original volume via SO(3) rotations.", sub: "What fundamental set-theoretic axiom makes non-measurable partition possible?", color: "#ffb86c", sol: ["AXIOM_OF_CHOICE_NON_MEASURABLE", "AXIOM_OF_CHOICE", "AC"] },
-            47: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 047 // HOPF_FIBRATION_TOPOLOGY ]", task: "Principal fiber bundle: <code>S¹ ↪ S³ → S²</code>.<br>Every two fiber circles in 3-sphere are mutually linked with linking number 1.", sub: "Name this foundational geometric fibration mapping.", color: "#bd93f9", sol: ["HOPF_FIBRATION_LINKING", "HOPF_FIBRATION", "HOPF_BUNDLE"] },
-            48: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 048 // MENGER_SPONGE_NULL_MEASURE ]", task: "Universal 3D fractal curve. Hausdorff dimension: <code>D = ln(20)/ln(3) ≈ 2.7268</code>.<br>Lebesgue volume converges to 0 while surface area approaches infinity.", sub: "Enter the volume vs surface limit dichotomy of the Menger sponge.", color: "#ff5555", sol: ["ZERO_VOLUME_INFINITE_AREA", "MENGER_SPONGE", "NULL_LEBESGUE_MEASURE"] },
-            49: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 049 // E8_EXCEPTIONAL_ROOT_LATTICE ]", task: "248-dimensional exceptional simple Lie group.<br>Root system consists of 240 vectors of norm √2 in 8-dimensional Euclidean space.", sub: "Identify the exceptional Lie algebra classification code.", color: "#f1fa8c", sol: ["EXCEPTIONAL_LIE_GROUP_E8", "E8_LATTICE", "E8"] },
-            50: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 050 // PERELMAN_RICCI_FLOW_SURGERY ]", task: "Geometric evolution equation: <code>∂g<sub>ij</sub>/∂t = -2 R<sub>ij</sub></code>.<br>Ricci flow with surgery smooths topological singularities, proving the Poincaré Conjecture.", sub: "Name the non-linear geometric heat flow equation.", color: "#50fa7b", sol: ["PERELMAN_RICCI_FLOW", "RICCI_FLOW", "RICCI_FLOW_SURGERY"] },
-            51: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 051 // FIBONACCI_ANYON_GOLDEN_BRAID ]", task: "Non-Abelian topological braiding dimension: <code>d<sub>τ</sub> = (1 + √5)/2 = φ</code>.<br>Fusion category rule: <code>τ ⊗ τ = 1 ⊕ τ</code>.", sub: "What irrational geometric ratio governs topological quantum dimension?", color: "#00e5ff", sol: ["GOLDEN_RATIO_FUSION", "GOLDEN_RATIO", "PHI", "1.6180339"] },
-            52: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 052 // CLIFFORD_TORUS_FOUR_SPACE ]", task: "Minimal surface embedded in unit 3-sphere S³ ⊂ ℝ⁴:<br><code>x₁² + x₂² = 1/2</code>, <code>x₃² + x₄² = 1/2</code>.<br>Intrinsic Gaussian curvature is identically zero.", sub: "Identify this flat Riemannian torus in 4-space.", color: "#8be9fd", sol: ["FLAT_CLIFFORD_TORUS", "CLIFFORD_TORUS", "FLAT_TORUS"] },
-            53: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 053 // SIERPINSKI_CARPET_CONTINUUM ]", task: "Planar fractal continuum with topological dimension 1 and Hausdorff dimension <code>ln(8)/ln(3) ≈ 1.8928</code>.<br>Universal curve containing a homeomorphic copy of every 1D planar network.", sub: "Name this universal fractal continuum.", color: "#ff79c6", sol: ["SIERPINSKI_FRACTAL_LATTICE", "SIERPINSKI_CARPET", "SIERPINSKI"] },
-            54: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 054 // CHERN_SIMONS_JONES_INVARIANT ]", task: "Topological quantum field theory on 3-manifold.<br>Wilson loop expectation value computes the Jones polynomial knot invariant: <code>⟨W(K)⟩ = V<sub>K</sub>(q)</code>.", sub: "Identify the 3D gauge field action defining topological invariants.", color: "#ffb86c", sol: ["CHERN_SIMONS_KNOT_INVARIANT", "CHERN_SIMONS", "JONES_POLYNOMIAL"] },
-            55: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 055 // GROMOV_DELTA_HYPERBOLICITY ]", task: "Metric space metric condition for thin geodesic triangles:<br>Every side of triangle is contained within δ-neighborhood of union of other two sides.", sub: "Enter the fundamental metric property of negative curvature spaces.", color: "#bd93f9", sol: ["DELTA_HYPERBOLIC_TRIANGLES", "GROMOV_HYPERBOLIC", "DELTA_HYPERBOLICITY"] },
-            56: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 056 // PENROSE_FIVE_FOLD_TILING ]", task: "Aperiodic tiling of Euclidean plane with kite and dart prototiles.<br>Possesses forbidden 5-fold quasicrystalline rotational symmetry without translational invariance.", sub: "Identify this non-periodic planar tessellation.", color: "#ff5555", sol: ["APERIODIC_FIVE_FOLD_SYMMETRY", "PENROSE_TILING", "PENROSE_APERIODIC"] },
-            57: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 057 // CALABI_CONJECTURE_SYNTHESIS ]", task: "CONVERGENCE OF EPOCH III:<br>Yau's theorem proves existence of Ricci-flat metric on compact complex Kähler manifold with <code>c₁(M) = 0</code>.<br>Higher dimensions collapse into formal computational strings.", sub: "Input the vanishing Chern class condition to unlock Epoch IV.", color: "#ffffff", sol: ["CHERN_CLASS_ZERO_VANISHING", "CALABI_CONJECTURE", "YAU_THEOREM"] },
+            39: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 039 // POINCARE_HYPERBOLIC_DISK ]", task: "Hyperbolic space metric: <code>ds² = 4(dx² + dy²) / (1 - x² - y²)²</code>.<br>Gaussian curvature is constant and negative.", sub: "Input the constant Gaussian curvature invariant [K = ?].", color: "#bd93f9", btnText: "CURVE SPACE", canvas: "hyperbolic", sol: ["NEGATIVE_CURVATURE", "GAUSSIAN_CURVATURE_MINUS_ONE", "-1", "K=-1"] },
+            40: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 040 // CALABI_YAU_COMPACTIFICATION ]", task: "6-dimensional Ricci-flat Kähler manifold in superstring theory.<br>Holonomy group SU(3), vanishing first Chern class: <code>c<sub>1</sub>(M) = 0</code>.", sub: "Identify the compactified geometric manifold type.", color: "#00e5ff", btnText: "COMPACTIFY DIMENSIONS", canvas: "hyperbolic", sol: ["RICCI_FLAT_SIX_MANIFOLD", "CALABI_YAU", "CALABI_YAU_MANIFOLD"] },
+            41: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 041 // KLEIN_BOTTLE_NON_ORIENTABILITY ]", task: "4D self-intersecting closed manifold with Euler characteristic χ = 0.<br>A single continuous boundaryless surface with no interior/exterior distinction.", sub: "Identify the global topological orientability status.", color: "#ff79c6", btnText: "INVERT SURFACE", sol: ["NON_ORIENTABLE_SURFACE", "KLEIN_BOTTLE", "NON_ORIENTABLE"] },
+            42: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 042 // ALEXANDER_HORNED_SPHERE ]", task: "Topological embedding of 2-sphere S² into ℝ³ with wild Cantor boundary.<br>Exterior domain is not simply connected: <code>π₁(ℝ³ \\ X) ≠ 0</code>.", sub: "Name this pathology in wild topology.", color: "#ff5555", btnText: "RESOLVE WILD SPHERE", sol: ["WILD_TOPOLOGY_NON_SMOOTH", "ALEXANDER_HORNED_SPHERE", "WILD_SPHERE"] },
+            43: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 043 // MANDELBROT_BOUNDARY_FRACTAL ]", task: "Complex recurrence: <code>z<sub>n+1</sub> = z<sub>n</sub>² + c</code>.<br>Boundary ∂M is connected, self-similar, with Hausdorff dimension exactly equal to 2.", sub: "Enter the Hausdorff fractal dimension of the Mandelbrot boundary.", color: "#f1fa8c", btnText: "COMPUTE HAUSDORFF", sol: ["HAUSDORFF_DIMENSION_TWO", "DIMENSION_2", "2", "HAUSDORFF_2"] },
+            44: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 044 // MILNOR_EXOTIC_SEVEN_SPHERES ]", task: "Smooth manifolds homeomorphic to S⁷ but not diffeomorphic.<br>Differential topology admits exactly 28 distinct smooth structures.", sub: "Input the invariant number of exotic differential structures on S⁷.", color: "#50fa7b", btnText: "COUNT STRUCTURES", sol: ["MILNOR_EXOTIC_SPHERE_28", "28", "EXOTIC_SPHERES_28"] },
+            45: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 045 // HILBERT_INFINITE_CUBE ]", task: "Countable topological product: <code>I<sup>ω</sup> = ∏<sub>n=1</sub><sup>∞</sup> [0, 1/n]</code>.<br>Compact, connected, metrizable infinite-dimensional space.", sub: "Identify the canonical infinite-dimensional topological cube.", color: "#8be9fd", btnText: "EXTEND TO INFINITY", sol: ["INFINITE_DIMENSIONAL_HILBERT_CUBE", "HILBERT_CUBE", "TOPOLOGICAL_HILBERT_CUBE"] },
+            46: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 046 // BANACH_TARSKI_PARADOX_AC ]", task: "Decomposition of solid ball B³ into 5 non-measurable sets.<br>Reassembly yields two identical balls of original volume via SO(3) rotations.", sub: "What fundamental set-theoretic axiom makes non-measurable partition possible?", color: "#ffb86c", btnText: "DUPLICATE SPHERE", sol: ["AXIOM_OF_CHOICE_NON_MEASURABLE", "AXIOM_OF_CHOICE", "AC"] },
+            47: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 047 // HOPF_FIBRATION_TOPOLOGY ]", task: "Principal fiber bundle: <code>S¹ ↪ S³ → S²</code>.<br>Every two fiber circles in 3-sphere are mutually linked with linking number 1.", sub: "Name this foundational geometric fibration mapping.", color: "#bd93f9", btnText: "LINK FIBERS", sol: ["HOPF_FIBRATION_LINKING", "HOPF_FIBRATION", "HOPF_BUNDLE"] },
+            48: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 048 // MENGER_SPONGE_NULL_MEASURE ]", task: "Universal 3D fractal curve. Hausdorff dimension: <code>D = ln(20)/ln(3) ≈ 2.7268</code>.<br>Lebesgue volume converges to 0 while surface area approaches infinity.", sub: "Enter the volume vs surface limit dichotomy of the Menger sponge.", color: "#ff5555", btnText: "COLLAPSE VOLUME", sol: ["ZERO_VOLUME_INFINITE_AREA", "MENGER_SPONGE", "NULL_LEBESGUE_MEASURE"] },
+            49: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 049 // E8_EXCEPTIONAL_ROOT_LATTICE ]", task: "248-dimensional exceptional simple Lie group.<br>Root system consists of 240 vectors of norm √2 in 8-dimensional Euclidean space.", sub: "Identify the exceptional Lie algebra classification code.", color: "#f1fa8c", btnText: "PROJECT E8", sol: ["EXCEPTIONAL_LIE_GROUP_E8", "E8_LATTICE", "E8"] },
+            50: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 050 // PERELMAN_RICCI_FLOW_SURGERY ]", task: "Geometric evolution equation: <code>∂g<sub>ij</sub>/∂t = -2 R<sub>ij</sub></code>.<br>Ricci flow with surgery smooths topological singularities, proving the Poincaré Conjecture.", sub: "Name the non-linear geometric heat flow equation.", color: "#50fa7b", btnText: "SMOOTH SINGULARITY", sol: ["PERELMAN_RICCI_FLOW", "RICCI_FLOW", "RICCI_FLOW_SURGERY"] },
+            51: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 051 // FIBONACCI_ANYON_GOLDEN_BRAID ]", task: "Non-Abelian topological braiding dimension: <code>d<sub>τ</sub> = (1 + √5)/2 = φ</code>.<br>Fusion category rule: <code>τ ⊗ τ = 1 ⊕ τ</code>.", sub: "What irrational geometric ratio governs topological quantum dimension?", color: "#00e5ff", btnText: "BRAID GOLDEN RATIO", sol: ["GOLDEN_RATIO_FUSION", "GOLDEN_RATIO", "PHI", "1.6180339"] },
+            52: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 052 // CLIFFORD_TORUS_FOUR_SPACE ]", task: "Minimal surface embedded in unit 3-sphere S³ ⊂ ℝ⁴:<br><code>x₁² + x₂² = 1/2</code>, <code>x₃² + x₄² = 1/2</code>.<br>Intrinsic Gaussian curvature is identically zero.", sub: "Identify this flat Riemannian torus in 4-space.", color: "#8be9fd", btnText: "EMBED TORUS", sol: ["FLAT_CLIFFORD_TORUS", "CLIFFORD_TORUS", "FLAT_TORUS"] },
+            53: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 053 // SIERPINSKI_CARPET_CONTINUUM ]", task: "Planar fractal continuum with topological dimension 1 and Hausdorff dimension <code>ln(8)/ln(3) ≈ 1.8928</code>.<br>Universal curve containing a homeomorphic copy of every 1D planar network.", sub: "Name this universal fractal continuum.", color: "#ff79c6", btnText: "FRACTAL LATTICE", sol: ["SIERPINSKI_FRACTAL_LATTICE", "SIERPINSKI_CARPET", "SIERPINSKI"] },
+            54: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 054 // CHERN_SIMONS_JONES_INVARIANT ]", task: "Topological quantum field theory on 3-manifold.<br>Wilson loop expectation value computes the Jones polynomial knot invariant: <code>⟨W(K)⟩ = V<sub>K</sub>(q)</code>.", sub: "Identify the 3D gauge field action defining topological invariants.", color: "#ffb86c", btnText: "COMPUTE JONES KNOT", sol: ["CHERN_SIMONS_KNOT_INVARIANT", "CHERN_SIMONS", "JONES_POLYNOMIAL"] },
+            55: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 055 // GROMOV_DELTA_HYPERBOLICITY ]", task: "Metric space metric condition for thin geodesic triangles:<br>Every side of triangle is contained within δ-neighborhood of union of other two sides.", sub: "Enter the fundamental metric property of negative curvature spaces.", color: "#bd93f9", btnText: "BOUND TRIANGLE", sol: ["DELTA_HYPERBOLIC_TRIANGLES", "GROMOV_HYPERBOLIC", "DELTA_HYPERBOLICITY"] },
+            56: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 056 // PENROSE_FIVE_FOLD_TILING ]", task: "Aperiodic tiling of Euclidean plane with kite and dart prototiles.<br>Possesses forbidden 5-fold quasicrystalline rotational symmetry without translational invariance.", sub: "Identify this non-periodic planar tessellation.", color: "#ff5555", btnText: "TILE APERIODIC", sol: ["APERIODIC_FIVE_FOLD_SYMMETRY", "PENROSE_TILING", "PENROSE_APERIODIC"] },
+            57: { epoch: "EPOCH III // NON-EUCLIDEAN TOPOLOGY", title: "[ TIER 057 // CALABI_CONJECTURE_SYNTHESIS ]", task: "CONVERGENCE OF EPOCH III:<br>Yau's theorem proves existence of Ricci-flat metric on compact complex Kähler manifold with <code>c₁(M) = 0</code>.<br>Higher dimensions collapse into formal computational strings.", sub: "Input the vanishing Chern class condition to unlock Epoch IV.", color: "#ffffff", btnText: "COLLAPSE TOPOLOGY", sol: ["CHERN_CLASS_ZERO_VANISHING", "CALABI_CONJECTURE", "YAU_THEOREM"] },
 
-            // --- EPOCH IV [058-076] GODELIAN INCOMPLETENESS & INCOMPUTABLE AUTOMATA (LAYER 2 POISON ACTIVE) ---
-            58: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 058 // CHURCH_TURING_OMEGA_COMBINATOR ]", task: "Pure Lambda Calculus non-terminating self-application: <code>(λx. x x)(λx. x x)</code>.<br>Reduces infinitely to itself without normal form.", sub: "Identify the foundational looping lambda combinator.", color: "#ffb86c", canvas: "turing", sol: ["OMEGA_COMBINATOR", "LAMBDA_INFINITE_LOOP", "OMEGA"] },
-            59: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 059 // BUSY_BEAVER_FOUR_STATE_LIMIT ]", task: "Maximum step shifts executed by 4-state 2-symbol halting Turing machine: <code>BB(4) = ?</code>.<br>Exceeds all linear recurrence bounds.", sub: "Input exact numerical shift count for BB(4).", color: "#f1fa8c", canvas: "turing", sol: ["107", "BB4_107", "SHIFTS_107"] },
-            60: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 060 // TURING_HALTING_DECIDABILITY_BARRIER ]", task: "No universal algorithm H(M, w) exists to decide program termination.<br>Diagonalization proof: <code>D(⟨D⟩)</code> halts iff D(⟨D⟩) does not halt.", sub: "Enter the formal undecidable decision problem name.", color: "#ff5555", sol: ["HALTING_PROBLEM_UNDECIDABLE", "HALTING_PROBLEM", "UNDECIDABLE_HALT"] },
-            61: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 061 // WOLFRAM_RULE_110_UNIVERSALITY ]", task: "Elementary 1D cellular automaton transition: <code>01101110₂</code>.<br>Proven Turing-complete via interacting localized glider solitons.", sub: "Enter the numerical Wolfram rule designation.", color: "#50fa7b", sol: ["RULE_110_TURING_COMPLETE", "RULE_110", "110", "WOLFRAM_110"] },
-            62: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 062 // POST_CORRESPONDENCE_PROBLEM ]", task: "Given finite set of domino pairs (u_i, v_i), determine if match exists: <code>u_{i_1}...u_{i_k} = v_{i_1}...v_{i_k}</code>.<br>Undecidable over alphabets of size ≥ 2.", sub: "Identify Post's undecidable string matching problem.", color: "#8be9fd", sol: ["POST_CORRESPONDENCE_UNDECIDABLE", "PCP_UNDECIDABLE", "PCP"] },
-            63: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 063 // CONWAY_UNIVERSAL_GLIDER_SYNTHESIS ]", task: "Cellular automaton B3/S23.<br>A periodic pattern creating an infinite stream of 5-cell moving gliders, proving Turing universality.", sub: "Name the foundational periodic glider generator.", color: "#bd93f9", sol: ["GOSPER_GLIDER_GUN", "UNIVERSAL_CONSTRUCTOR", "GLIDER_GUN"] },
-            64: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 064 // RICE_SEMANTIC_UNDECIDABILITY ]", task: "Any non-trivial semantic property of partial computable functions is algorithmically undecidable.<br><code>L = {⟨M⟩ | L(M) ∈ P}</code> is non-recursive.", sub: "Identify Rice's theorem on code semantics.", color: "#00e5ff", sol: ["RICE_THEOREM_UNDECIDABLE", "RICE_THEOREM", "RICE"] },
-            65: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 065 // GODEL_FIRST_INCOMPLETENESS ]", task: "Constructed sentence G: \"G cannot be proven within formal axiomatic system F\".<br>If F is consistent, G is true but unprovable.", sub: "Enter the formal truth status of Gödel sentence G.", color: "#ff79c6", sol: ["TRUE_BUT_UNPROVABLE", "UNPROVABLE_TRUTH", "INCOMPLETE"] },
-            66: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 066 // GODEL_SECOND_CONSISTENCY_LIMIT ]", task: "A consistent formal system containing basic arithmetic cannot prove its own consistency: <code>F ⊬ Con(F)</code>.", sub: "Input the epistemological limit on self-proving consistency.", color: "#ff5555", sol: ["SYSTEM_CANNOT_PROVE_OWN_CONSISTENCY", "SECOND_INCOMPLETENESS", "CON_F_UNPROVABLE"] },
-            67: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 067 // KOLMOGOROV_COMPLEXITY_INCOMPUTABILITY ]", task: "Shortest binary description length K(s) of string s.<br>No formal theory can prove a string has Kolmogorov complexity > c.", sub: "Identify the uncomputable shortest program metric.", color: "#f1fa8c", sol: ["INCOMPUTABLE_KOLMOGOROV_BOUND", "KOLMOGOROV_COMPLEXITY", "KOLMOGOROV"] },
-            68: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 068 // CHAITIN_OMEGA_ALGORITHMIC_RANDOM ]", task: "Universal halting probability: <code>Ω = Σ_{p halts} 2^{-|p|}</code>.<br>Maximally dense, uncomputable, and algorithmically incompressible.", sub: "Name Chaitin's constant of pure mathematical randomness.", color: "#50fa7b", sol: ["CHAITIN_HALTING_PROBABILITY", "ALGORITHMIC_RANDOMNESS", "CHAITIN_OMEGA"] },
-            69: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 069 // MALBOLGE_HELL_BASE_THREE_MACHINE ]", task: "Base-3 ternary virtual machine with self-modifying code pointer and non-linear permutation lookup: <code>crz</code> operator.", sub: "Name the esoteric machine designed to be mathematically unprogrammable.", color: "#ffb86c", sol: ["MALBOLGE_TRI_TRIT_MACHINE", "CRAZY_OPERATION", "MALBOLGE"] },
-            70: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 070 // ACKERMANN_PETER_SUPER_RECURSION ]", task: "Fastest-growing recursive function not belonging to primitive recursive class: <code>A(4, 2) = 2^{65536} - 3</code>.", sub: "Enter the structural classification of the Ackermann function.", color: "#8be9fd", sol: ["NON_PRIMITIVE_RECURSIVE", "ACKERMANN_FUNCTION", "ACKERMANN"] },
-            71: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 071 // TARSKI_TRUTH_UNDEFINABILITY ]", task: "No sufficiently rich formal language L can define its own truth predicate: <code>True(⟨φ⟩) ↔ φ</code> is inconsistent.", sub: "Identify Tarski's theorem on semantic truth limits.", color: "#bd93f9", sol: ["TARSKI_TRUTH_UNDEFINABILITY", "TARSKI_THEOREM", "TRUTH_UNDEFINABILITY"] },
-            72: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 072 // LANGTON_ANT_CHAOTIC_HIGHWAY ]", task: "Simple 2D grid automaton: turns 90° right on white, 90° left on black.<br>Chaotic attractor abruptly builds 104-step recurrent diagonal highway.", sub: "Enter the cycle length of the emergent ant highway.", color: "#ff5555", sol: ["EMERGENT_HIGHWAY_104", "104", "LANGTON_ANT_104"] },
-            73: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 073 // WHITESPACE_INVISIBLE_STACK_MACHINE ]", task: "Instruction set consisting strictly of space (0x20), tab (0x09), and linefeed (0x0A).<br>Invisible stack manipulation and heap storage.", sub: "Name this esoteric invisible bytecode architecture.", color: "#f1fa8c", sol: ["INVISIBLE_SYNTAX_STACK", "WHITESPACE_BYTECODE", "WHITESPACE"] },
-            74: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 074 // TURING_DEGREE_HYPERJUMP ]", task: "Oracle machine equipped with halting oracle 0'.<br>Arithmetical hierarchy jump: <code>0' → 0'' → 0'''</code>.", sub: "Enter the operator mapping Turing degrees to strictly higher unsolvability.", color: "#50fa7b", sol: ["TURING_DEGREE_ZERO_JUMP", "TURING_JUMP", "TURING_DEGREE"] },
-            75: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 075 // BLUM_SPEEDUP_THEOREM_ANOMALY ]", task: "Complexity theory pathology: there exist computable problems with no fastest algorithm.<br>For any algorithm, there is another 2^f(n) times faster.", sub: "Name Blum's acceleration theorem.", color: "#00e5ff", sol: ["NO_OPTIMAL_ALGORITHM", "BLUM_SPEEDUP", "BLUM_SPEEDUP_THEOREM"] },
-            76: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 076 // CHURCH_KLEENE_RECURSIVE_ORDINAL ]", task: "CONVERGENCE OF EPOCH IV:<br>The supremum of all computable ordinal notations: <code>ω₁<sup>CK</sup></code>.<br>The absolute upper boundary where algorithmic mathematics ceases to exist.", sub: "Input the Church-Kleene ordinal identifier to unlock Epoch V.", color: "#ffffff", sol: ["CHURCH_KLEENE_ORDINAL", "OMEGA_1_CK", "RECURSIVE_ORDINAL_SUPREMUM"] }
+            // --- EPOCH IV [058-076] ---
+            58: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 058 // CHURCH_TURING_OMEGA_COMBINATOR ]", task: "Pure Lambda Calculus non-terminating self-application: <code>(λx. x x)(λx. x x)</code>.<br>Reduces infinitely to itself without normal form.", sub: "Identify the foundational looping lambda combinator.", color: "#ffb86c", btnText: "REDUCE LAMBDA", canvas: "turing", sol: ["OMEGA_COMBINATOR", "LAMBDA_INFINITE_LOOP", "OMEGA"] },
+            59: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 059 // BUSY_BEAVER_FOUR_STATE_LIMIT ]", task: "Maximum step shifts executed by 4-state 2-symbol halting Turing machine: <code>BB(4) = ?</code>.<br>Exceeds all linear recurrence bounds.", sub: "Input exact numerical shift count for BB(4).", color: "#f1fa8c", btnText: "HALT BEAVER", canvas: "turing", sol: ["107", "BB4_107", "SHIFTS_107"] },
+            60: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 060 // TURING_HALTING_DECIDABILITY_BARRIER ]", task: "No universal algorithm H(M, w) exists to decide program termination.<br>Diagonalization proof: <code>D(⟨D⟩)</code> halts iff D(⟨D⟩) does not halt.", sub: "Enter the formal undecidable decision problem name.", color: "#ff5555", btnText: "ASSERT UNDECIDABILITY", sol: ["HALTING_PROBLEM_UNDECIDABLE", "HALTING_PROBLEM", "UNDECIDABLE_HALT"] },
+            61: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 061 // WOLFRAM_RULE_110_UNIVERSALITY ]", task: "Elementary 1D cellular automaton transition: <code>01101110₂</code>.<br>Proven Turing-complete via interacting localized glider solitons.", sub: "Enter the numerical Wolfram rule designation.", color: "#50fa7b", btnText: "SIMULATE CELLULAR", sol: ["RULE_110_TURING_COMPLETE", "RULE_110", "110", "WOLFRAM_110"] },
+            62: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 062 // POST_CORRESPONDENCE_PROBLEM ]", task: "Given finite set of domino pairs (u_i, v_i), determine if match exists: <code>u_{i_1}...u_{i_k} = v_{i_1}...v_{i_k}</code>.<br>Undecidable over alphabets of size ≥ 2.", sub: "Identify Post's undecidable string matching problem.", color: "#8be9fd", btnText: "MATCH DOMINOES", sol: ["POST_CORRESPONDENCE_UNDECIDABLE", "PCP_UNDECIDABLE", "PCP"] },
+            63: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 063 // CONWAY_UNIVERSAL_GLIDER_SYNTHESIS ]", task: "Cellular automaton B3/S23.<br>A periodic pattern creating an infinite stream of 5-cell moving gliders, proving Turing universality.", sub: "Name the foundational periodic glider generator.", color: "#bd93f9", btnText: "FIRE GLIDER", sol: ["GOSPER_GLIDER_GUN", "UNIVERSAL_CONSTRUCTOR", "GLIDER_GUN"] },
+            64: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 064 // RICE_SEMANTIC_UNDECIDABILITY ]", task: "Any non-trivial semantic property of partial computable functions is algorithmically undecidable.<br><code>L = {⟨M⟩ | L(M) ∈ P}</code> is non-recursive.", sub: "Identify Rice's theorem on code semantics.", color: "#00e5ff", btnText: "PROVE SEMANTICS", sol: ["RICE_THEOREM_UNDECIDABLE", "RICE_THEOREM", "RICE"] },
+            65: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 065 // GODEL_FIRST_INCOMPLETENESS ]", task: "Constructed sentence G: \"G cannot be proven within formal axiomatic system F\".<br>If F is consistent, G is true but unprovable.", sub: "Enter the formal truth status of Gödel sentence G.", color: "#ff79c6", btnText: "ASSERT UNPROVABILITY", sol: ["TRUE_BUT_UNPROVABLE", "UNPROVABLE_TRUTH", "INCOMPLETE"] },
+            66: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 066 // GODEL_SECOND_CONSISTENCY_LIMIT ]", task: "A consistent formal system containing basic arithmetic cannot prove its own consistency: <code>F ⊬ Con(F)</code>.", sub: "Input the epistemological limit on self-proving consistency.", color: "#ff5555", btnText: "BREAK CONSISTENCY", sol: ["SYSTEM_CANNOT_PROVE_OWN_CONSISTENCY", "SECOND_INCOMPLETENESS", "CON_F_UNPROVABLE"] },
+            67: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 067 // KOLMOGOROV_COMPLEXITY_INCOMPUTABILITY ]", task: "Shortest binary description length K(s) of string s.<br>No formal theory can prove a string has Kolmogorov complexity > c.", sub: "Identify the uncomputable shortest program metric.", color: "#f1fa8c", btnText: "COMPRESS INFORMATION", sol: ["INCOMPUTABLE_KOLMOGOROV_BOUND", "KOLMOGOROV_COMPLEXITY", "KOLMOGOROV"] },
+            68: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 068 // CHAITIN_OMEGA_ALGORITHMIC_RANDOM ]", task: "Universal halting probability: <code>Ω = Σ_{p halts} 2^{-|p|}</code>.<br>Maximally dense, uncomputable, and algorithmically incompressible.", sub: "Name Chaitin's constant of pure mathematical randomness.", color: "#50fa7b", btnText: "MEASURE OMEGA", sol: ["CHAITIN_HALTING_PROBABILITY", "ALGORITHMIC_RANDOMNESS", "CHAITIN_OMEGA"] },
+            69: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 069 // MALBOLGE_HELL_BASE_THREE_MACHINE ]", task: "Base-3 ternary virtual machine with self-modifying code pointer and non-linear permutation lookup: <code>crz</code> operator.", sub: "Name the esoteric machine designed to be mathematically unprogrammable.", color: "#ffb86c", btnText: "EXECUTE MALBOLGE", sol: ["MALBOLGE_TRI_TRIT_MACHINE", "CRAZY_OPERATION", "MALBOLGE"] },
+            70: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 070 // ACKERMANN_PETER_SUPER_RECURSION ]", task: "Fastest-growing recursive function not belonging to primitive recursive class: <code>A(4, 2) = 2^{65536} - 3</code>.", sub: "Enter the structural classification of the Ackermann function.", color: "#8be9fd", btnText: "SUPER RECURSE", sol: ["NON_PRIMITIVE_RECURSIVE", "ACKERMANN_FUNCTION", "ACKERMANN"] },
+            71: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 071 // TARSKI_TRUTH_UNDEFINABILITY ]", task: "No sufficiently rich formal language L can define its own truth predicate: <code>True(⟨φ⟩) ↔ φ</code> is inconsistent.", sub: "Identify Tarski's theorem on semantic truth limits.", color: "#bd93f9", btnText: "DEFINE TRUTH", sol: ["TARSKI_TRUTH_UNDEFINABILITY", "TARSKI_THEOREM", "TRUTH_UNDEFINABILITY"] },
+            72: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 072 // LANGTON_ANT_CHAOTIC_HIGHWAY ]", task: "Simple 2D grid automaton: turns 90° right on white, 90° left on black.<br>Chaotic attractor abruptly builds 104-step recurrent diagonal highway.", sub: "Enter the cycle length of the emergent ant highway.", color: "#ff5555", btnText: "BUILD HIGHWAY", sol: ["EMERGENT_HIGHWAY_104", "104", "LANGTON_ANT_104"] },
+            73: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 073 // WHITESPACE_INVISIBLE_STACK_MACHINE ]", task: "Instruction set consisting strictly of space (0x20), tab (0x09), and linefeed (0x0A).<br>Invisible stack manipulation and heap storage.", sub: "Name this esoteric invisible bytecode architecture.", color: "#f1fa8c", btnText: "RUN INVISIBLE BYTECODE", sol: ["INVISIBLE_SYNTAX_STACK", "WHITESPACE_BYTECODE", "WHITESPACE"] },
+            74: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 074 // TURING_DEGREE_HYPERJUMP ]", task: "Oracle machine equipped with halting oracle 0'.<br>Arithmetical hierarchy jump: <code>0' → 0'' → 0'''</code>.", sub: "Enter the operator mapping Turing degrees to strictly higher unsolvability.", color: "#50fa7b", btnText: "JUMP TURING DEGREE", sol: ["TURING_DEGREE_ZERO_JUMP", "TURING_JUMP", "TURING_DEGREE"] },
+            75: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 075 // BLUM_SPEEDUP_THEOREM_ANOMALY ]", task: "Complexity theory pathology: there exist computable problems with no fastest algorithm.<br>For any algorithm, there is another 2^f(n) times faster.", sub: "Name Blum's acceleration theorem.", color: "#00e5ff", btnText: "ACCELERATE ALGORITHM", sol: ["NO_OPTIMAL_ALGORITHM", "BLUM_SPEEDUP", "BLUM_SPEEDUP_THEOREM"] },
+            76: { epoch: "EPOCH IV // INCOMPUTABLE MACHINES", title: "[ TIER 076 // CHURCH_KLEENE_RECURSIVE_ORDINAL ]", task: "CONVERGENCE OF EPOCH IV:<br>The supremum of all computable ordinal notations: <code>ω₁<sup>CK</sup></code>.<br>The absolute upper boundary where algorithmic mathematics ceases to exist.", sub: "Input the Church-Kleene ordinal identifier to unlock Epoch V.", color: "#ffffff", btnText: "TRANSCEND COMPUTATION", sol: ["CHURCH_KLEENE_ORDINAL", "OMEGA_1_CK", "RECURSIVE_ORDINAL_SUPREMUM"] }
         };
 
         let currentTier = 1;
@@ -236,17 +234,6 @@
         const hexBox = document.getElementById('hex-box');
         const canvas = document.getElementById('main-canvas');
         const ctx = canvas.getContext('2d');
-
-        // СЛОЙ 1: АНТИ-DEVTOOLS ДЕТЕКТ
-        setInterval(() => {
-            const start = performance.now();
-            debugger;
-            if (performance.now() - start > 100) {
-                terminalBox.classList.add('glitch-lock');
-                log.style.color = "#ff0055";
-                log.innerText = "[CRITICAL]: OBSERVER INTERFERENCE DETECTED. REALITY SCRAMBLED.";
-            }
-        }, 1500);
 
         function loadTier(tNum) {
             currentTier = tNum;
@@ -279,6 +266,7 @@
             tierTitle.innerHTML = t.title;
             taskDesc.innerHTML = t.task;
             subDesc.innerHTML = t.sub;
+            submitBtn.innerText = t.btnText || "TRANSMIT KEY";
             passInput.value = "";
             log.innerHTML = "";
 
@@ -296,15 +284,13 @@
             if (t.canvas === "turing") { canvasBox.classList.remove('hidden'); initTuringCanvas(); }
         }
 
-        // ОБРАБОТЧИК ВВОДА С ЗАЩИТОЙ
-        document.getElementById('master-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function handleValidation() {
             if (isLocked) return;
 
             const val = passInput.value.trim().toUpperCase();
             const t = MASTER_TIERS[currentTier];
 
-            // HONEYPOT TRAP (СЛОЙ 1)
+            // HONEYPOTS
             const HONEYPOTS = ["PASSWORD", "ADMIN", "CICADA", "CICADA3301", "FLAG", "ROOT", "TEST"];
             if (HONEYPOTS.includes(val)) {
                 strikes = 0;
@@ -323,12 +309,12 @@
             }
 
             if (correct) {
-                strikes = 3; // Сброс попыток при успехе
+                strikes = 3;
                 log.style.color = "#50fa7b";
                 log.innerText = `[SUCCESS]: Tier ${currentTier} Cleared. Decrypting Tier ${currentTier + 1}...`;
                 setTimeout(() => {
                     loadTier(currentTier + 1);
-                }, 500);
+                }, 400);
             } else {
                 strikes--;
                 strikesTag.innerText = `ATTEMPTS: ${strikes} / 3`;
@@ -339,13 +325,22 @@
                     log.innerText = `[REJECTED]: Waveform collapsed. ${strikes} attempts remaining.`;
                 }
             }
+        }
+
+        // ОБРАБОТЧИКИ НАЖАТИЯ
+        submitBtn.addEventListener('click', handleValidation);
+        document.getElementById('master-form').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleValidation();
+            }
         });
 
-        // СИСТЕМА ЛОКДАУНА ПРИ 3 ОШИБКАХ
+        // ЛОКДАУН
         function triggerLockout(reason) {
             isLocked = true;
             terminalBox.classList.add('glitch-lock');
-            let timeLeft = 300; // 5 минут локдауна для теста
+            let timeLeft = 300;
             const timer = setInterval(() => {
                 timeLeft--;
                 log.style.color = "#ff0055";
@@ -355,7 +350,7 @@
                     isLocked = false;
                     strikes = 3;
                     terminalBox.classList.remove('glitch-lock');
-                    loadTier(1); // Сброс на Уровень 1
+                    loadTier(1);
                 }
             }, 1000);
         }
@@ -387,3 +382,64 @@
                 edges.forEach(([i, j]) => {
                     ctx.beginPath(); ctx.moveTo(proj[i][0], proj[i][1]); ctx.lineTo(proj[j][0], proj[j][1]); ctx.stroke();
                 });
+                canvasAnimId = requestAnimationFrame(render);
+            }
+            render();
+        }
+
+        // ЧЕРНАЯ ДЫРА
+        function initBlackHole() {
+            canvas.width = canvasBox.clientWidth; canvas.height = canvasBox.clientHeight;
+            const cx = canvas.width / 2, cy = canvas.height / 2, eh = 28;
+            const parts = [];
+            for (let i = 0; i < 200; i++) {
+                parts.push({ r: Math.random()*(canvas.width*0.45-eh)+eh, a: Math.random()*Math.PI*2, s: Math.random()*0.02+0.015, sz: Math.random()*2+1, h: Math.random()*40+5 });
+            }
+            function render() {
+                ctx.fillStyle = 'rgba(6, 6, 6, 0.2)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+                parts.forEach(p => {
+                    p.a += p.s * (120/p.r); p.r -= 0.35;
+                    if(p.r <= eh) { p.r = canvas.width*0.45; p.a = Math.random()*Math.PI*2; }
+                    const x = cx + Math.cos(p.a)*p.r, y = cy + Math.sin(p.a)*(p.r*0.38);
+                    ctx.fillStyle = `hsl(${p.h}, 100%, 60%)`;
+                    ctx.beginPath(); ctx.arc(x, y, p.sz, 0, Math.PI*2); ctx.fill();
+                });
+                const g = ctx.createRadialGradient(cx, cy, eh*0.8, cx, cy, eh*2.2);
+                g.addColorStop(0, 'rgba(255,60,0,0.9)'); g.addColorStop(0.5, 'rgba(255,0,80,0.3)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, eh*2.2, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(cx, cy, eh, 0, Math.PI*2); ctx.fill();
+                ctx.strokeStyle = '#ff3366'; ctx.lineWidth = 1.2; ctx.stroke();
+                canvasAnimId = requestAnimationFrame(render);
+            }
+            render();
+        }
+
+        // КВАНТОВЫЙ ХОЛСТ
+        function initQuantumCanvas() {
+            canvas.width = canvasBox.clientWidth; canvas.height = canvasBox.clientHeight;
+            const cx = canvas.width / 2, cy = canvas.height / 2, R = canvas.height * 0.38;
+            let ang = 0;
+            function render() {
+                ctx.fillStyle = 'rgba(6, 6, 6, 0.25)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+                ang += 0.02;
+                ctx.strokeStyle = 'rgba(0, 229, 255, 0.2)'; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.stroke();
+                ctx.beginPath(); ctx.ellipse(cx, cy, R, R*0.35, 0, 0, Math.PI*2); ctx.stroke();
+                const vx = cx + Math.sin(ang) * Math.cos(ang*0.7) * R;
+                const vy = cy - Math.cos(ang*0.7) * R;
+                ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(vx, vy); ctx.stroke();
+                ctx.fillStyle = '#ff79c6';
+                ctx.beginPath(); ctx.arc(vx, vy, 4, 0, Math.PI*2); ctx.fill();
+                canvasAnimId = requestAnimationFrame(render);
+            }
+            render();
+        }
+
+        // ГИПЕРБОЛИЧЕСКИЙ ДИСК
+        function initHyperbolicCanvas() {
+            canvas.width = canvasBox.clientWidth; canvas.height = canvasBox.clientHeight;
+            const cx = canvas.width / 2, cy = canvas.height / 2, R = canvas.height * 0.42;
+            let t = 0;
+            function render() {
+                ctx.fillStyle = 'rgba(6, 6, 6, 0.2)'; ctx.fillRect(0,0,can
