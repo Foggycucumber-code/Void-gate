@@ -3,36 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>OBSERVER // MONOLITH GATEWAY</title>
+    <title>THE VOID MONOLITH // 133 TIERS</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #030303;
+            background-color: #020202;
             color: #00ff41;
             font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
             overflow-x: hidden;
+            transition: color 0.6s ease;
         }
         .terminal {
-            background: #080808;
+            background: #060606;
             border: 1px solid #00ff41;
-            box-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.15);
             padding: 25px;
             max-width: 580px;
             width: 100%;
             text-align: center;
             border-radius: 4px;
         }
-        h1, h2 { font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px dashed #00ff41; padding-bottom: 10px; }
-        p { font-size: 0.85rem; line-height: 1.6; color: #a0ffa0; margin-bottom: 15px; }
+        .header-tag { font-size: 0.75rem; letter-spacing: 2px; color: #888; margin-bottom: 5px; }
+        h1, h2 { font-size: 1.05rem; margin-bottom: 15px; border-bottom: 1px dashed currentColor; padding-bottom: 8px; }
+        p { font-size: 0.85rem; line-height: 1.6; margin-bottom: 15px; }
+        .quote { font-style: italic; opacity: 0.7; font-size: 0.8rem; }
         input[type="text"] {
             width: 100%;
             background: #000;
-            border: 1px solid #00ff41;
+            border: 1px solid currentColor;
             color: #fff;
             padding: 12px;
             font-family: monospace;
@@ -53,247 +56,260 @@
             font-size: 0.95rem;
             display: inline-block;
             text-decoration: none;
+            letter-spacing: 1px;
         }
-        button:hover, .btn:hover { opacity: 0.85; }
-        #log { margin-top: 15px; font-size: 0.85rem; min-height: 25px; line-height: 1.4; color: #ff3333; }
+        button:active, .btn:active { opacity: 0.8; }
+        #log { margin-top: 15px; font-size: 0.85rem; min-height: 25px; line-height: 1.4; }
         .hidden { display: none !important; }
         
-        #canvas-box { position: relative; width: 100%; height: 320px; margin: 15px 0; }
-        canvas { width: 100%; height: 100%; display: block; }
+        #canvas-box { position: relative; width: 100%; height: 260px; margin: 15px 0; }
+        canvas { width: 100%; height: 100%; display: block; border-radius: 3px; }
         
-        /* Стили Уровня 4 (Энтропия) */
         .hex-dump {
-            background: #020202;
-            border: 1px solid #ff5555;
-            color: #ff5555;
-            padding: 12px;
-            font-size: 0.75rem;
+            background: #000;
+            border: 1px solid currentColor;
+            padding: 10px;
+            font-size: 0.72rem;
             text-align: left;
             word-break: break-all;
-            margin: 15px 0;
+            margin: 12px 0;
             line-height: 1.5;
-            max-height: 140px;
+            max-height: 110px;
             overflow-y: auto;
-            box-shadow: inset 0 0 10px rgba(255,85,85,0.2);
+        }
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 15px;
+            border-top: 1px solid #222;
+            padding-top: 8px;
         }
     </style>
 </head>
 <body>
 
-    <div class="terminal">
+    <div class="terminal" id="terminal-box">
+        <div class="header-tag" id="epoch-tag">EPOCH I // RELATIVISTIC SPACETIME</div>
+        <h1 id="tier-title">[ GATEWAY 01 // NULL_COLLAPSE ]</h1>
         
-        <!-- УРОВЕНЬ 1 -->
-        <div id="lvl1">
-            <h1>[ GATEWAY 01 // NULL_COLLAPSE ]</h1>
-            <p>EVALUATE THE CONDITION:<br><code>e<sup>iπ</sup> + 1 = ?</code></p>
-            <p style="color: #666; font-size: 0.8rem;">Warning: The portal detects observation weight.</p>
-            <form id="f1">
-                <input type="text" id="in1" placeholder="Awaiting observer input..." autocomplete="off">
-                <button type="submit">TRANSMIT TO VOID</button>
-            </form>
+        <div id="canvas-box" class="hidden"><canvas id="main-canvas"></canvas></div>
+
+        <div id="audio-box" class="hidden">
+            <audio controls src="anomaly.wav" style="width: 100%; margin: 10px 0;"></audio><br>
+            <a href="anomaly.wav" download="anomaly.wav" class="btn" style="background:#00e5ff; margin-bottom:15px;">DOWNLOAD WAV STREAM</a>
         </div>
 
-        <!-- УРОВЕНЬ 2 -->
-        <div id="lvl2" class="hidden">
-            <h2 style="color: #00e5ff; border-color: #00e5ff;">[ LEVEL 02 // ZERO_FREQUENCY_BEACON ]</h2>
-            <p style="color: #a0f0ff;">The signal was captured from beyond the event horizon.<br>Human ears hear chaos. The spectrum sees the truth.</p>
-            <audio controls src="anomaly.wav" style="width: 100%; margin: 15px 0;"></audio><br>
-            <a href="anomaly.wav" download="anomaly.wav" class="btn" style="background: #00e5ff; margin-bottom: 20px;">DOWNLOAD WAV STREAM</a>
-            <form id="f2">
-                <input type="text" id="in2" placeholder="Enter Spectrogram Key..." style="border-color: #00e5ff;" autocomplete="off">
-                <button type="submit" style="background: #00e5ff;">DECODE SIGNAL</button>
-            </form>
-        </div>
+        <div id="hex-box" class="hex-dump hidden"></div>
 
-        <!-- УРОВЕНЬ 3 (ХАРДКОР) -->
-        <div id="lvl3" class="hidden">
-            <h2 style="color: #bd93f9; border-color: #bd93f9;">[ LEVEL 03 // TESSERACT TOPOLOGY ]</h2>
-            <p style="color: #6272a4; font-style: italic;">"Umbra in quattuor dimensionibus non est nihil."</p>
-            <div id="canvas-box">
-                <canvas id="tesseract"></canvas>
-            </div>
-            <p style="color: #ff79c6; font-size: 0.75rem;">Precision Alignment Required: XW ⊥ YW [Tolerance: &plusmn;0.00001 rad]</p>
-            <form id="f3">
-                <input type="text" id="in3" placeholder="Enter 4D Alignment Vector..." style="border-color: #bd93f9;" autocomplete="off">
-                <button type="submit" style="background: #bd93f9; color: #000;">STABILIZE 4D AXIS</button>
-            </form>
-        </div>
+        <p id="task-desc">EVALUATE THE CONDITION:<br><code>e<sup>iπ</sup> + 1 = ?</code></p>
+        <p id="sub-desc" class="quote">"The portal detects observation weight. Bring no substance."</p>
 
-        <!-- УРОВЕНЬ 4 (КОЛОДЕЦ ЭНТРОПИИ) -->
-        <div id="lvl4" class="hidden">
-            <h2 style="color: #ff5555; border-color: #ff5555;">[ LEVEL 04 // INFORMATION BLACK HOLE ]</h2>
-            <p style="color: #ffb86c;">ENTROPY CRITICAL: <span id="entropy-val">7.9984</span> bits/byte.<br>A memory leak from a decaying Turing machine was captured.</p>
-            
-            <div class="hex-dump">
-                [XOR_MASK: 0x5A]<br>
-                71 7E 77 74 74 74 74 74 74 74 74 38 7B 77 77 77 77 77 77 77 77 74 74 74 74 74 74 74 74 74 38 77 77 77 77 77 77 77 77 74 74 74 74 74 74 74 74 74 74 74 38 7B 7B 7B 77 74 74 74 74 74 74 74 74 38 7B 7B 7B 7B 77 74 74 74 74 74 74 74 74 74 39 39 39 39 39 39 39 70 38 76 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 70 38 76 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 70 38 70 38 76 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 70
-            </div>
-
-            <p style="color: #8be9fd; font-size: 0.75rem;">Reverse the XOR transformation. Execute the underlying logic.</p>
-
-            <form id="f4">
-                <input type="text" id="in4" placeholder="Enter Zero-Entropy Passcode..." style="border-color: #ff5555;" autocomplete="off">
-                <button type="submit" style="background: #ff5555; color: #fff;">STABILIZE SINGULARITY</button>
-            </form>
-        </div>
+        <form id="master-form">
+            <input type="text" id="pass-input" placeholder="Awaiting observer input..." autocomplete="off">
+            <button type="submit" id="submit-btn">TRANSMIT TO VOID</button>
+        </form>
 
         <div id="log"></div>
+
+        <div class="meta-info">
+            <span id="tier-counter">TIER: 001 / 133</span>
+            <span id="entropy-tag">ENTROPY: 0.0000 BIT</span>
+            <span>EPOCH I: 19 TIERS</span>
+        </div>
     </div>
 
     <script>
+        // ВСЕ 19 УРОВНЕЙ ЭПОХИ I ВРУЧНУЮ (100% ENGLISH)
+        const EPOCH_I = {
+            1: {
+                title: "[ TIER 001 // NULL_COLLAPSE ]",
+                task: "EVALUATE THE IDENTITY:<br><code>e<sup>iπ</sup> + 1 = ?</code>",
+                sub: "The portal detects observation weight. Bring no substance.",
+                color: "#00ff41",
+                sol: [""]
+            },
+            2: {
+                title: "[ TIER 002 // ZERO_FREQUENCY_BEACON ]",
+                task: "The transmission arrived from beyond the event horizon.<br>Human ears hear chaos. The spectrum reveals the truth.",
+                sub: "Deconstruct frequency spectrum. Extract key.",
+                color: "#00e5ff",
+                audio: true,
+                sol: ["0X03_TESSERACT", "TESSERACT"]
+            },
+            3: {
+                title: "[ TIER 003 // TESSERACT_TOPOLOGY ]",
+                task: "Precision 4D Alignment Required: XW ⊥ YW [Tolerance: ±0.00001 rad]",
+                sub: "\"Umbra in quattuor dimensionibus non est nihil.\"",
+                color: "#bd93f9",
+                canvas: "tesseract",
+                sol: ["0X04_ENTROPY_WELL", "ENTROPY_WELL"]
+            },
+            4: {
+                title: "[ TIER 004 // SINGULARITY_EVENT_HORIZON ]",
+                task: "Accretion disk memory decay. Reverse XOR 0x5A transformation.<br>Execute the underlying Turing logic.",
+                sub: "Turing machine memory dump captured.",
+                color: "#ff5555",
+                canvas: "blackhole",
+                hex: "[XOR_MASK: 0x5A]\n71 7E 77 74 74 74 74 74 74 74 74 38 7B 77 77 77 77 77 77 77 77 74 74 74 74 74 74 74 74 74 38 77 77 77 77 77 77 77 77 74 74 74 74 74 74 74 74 74 74 74 38 7B 7B 7B 77 74 74 74 74 74 74 74 74 38 7B 7B 7B 7B 77 74 74 74 74 74 74 74 74 74 39 39 39 39 39 39 39 70 38 76 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 70",
+                sol: ["KERNEL", "0X05_SINGULARITY"]
+            },
+            5: {
+                title: "[ TIER 005 // CHRONOS_DILATION ]",
+                task: "Calculate proper time factor γ at radius <code>r = 1.5 r<sub>s</sub></code>.<br><code>γ = (1 - r<sub>s</sub>/r)<sup>-1/2</sup></code>.",
+                sub: "Compute exact square root value to 7 decimal digits.",
+                color: "#ffb86c",
+                sol: ["1.7320508", "SQRT(3)", "SQRT3"]
+            },
+            6: {
+                title: "[ TIER 006 // PLANCK_DISCRETIZATION ]",
+                task: "Spacetime dissolves into quantum foam at Wheeler scale.<br><code>l<sub>p</sub> = √(ħG / c³)</code>.",
+                sub: "Input standard metric Planck length exponent format [X.XXXE-XX].",
+                color: "#50fa7b",
+                sol: ["1.616255E-35", "1.616E-35", "PLANCK_LENGTH"]
+            },
+            7: {
+                title: "[ TIER 007 // LANDAUER_BOUND ]",
+                task: "Erasing one classical bit of entropy dissipates minimum heat.<br><code>ΔQ = k<sub>B</sub> · T · ln(2)</code>.",
+                sub: "Enter the fundamental thermodynamic information law.",
+                color: "#f1fa8c",
+                sol: ["LANDAUER", "LANDAUER_LIMIT", "LANDAUER_PRINCIPLE"]
+            },
+            8: {
+                title: "[ TIER 008 // THE SILENT ARCHITECT ]",
+                task: "The Creator stands on the shore of dying light.<br>Trace the uncompressed silhouette. Extract the hidden spectrum.",
+                sub: "\"His garment holds the hex. His gaze holds the horizon.\"",
+                color: "#8be9fd",
+                sol: ["WANDERER_AT_EVENT_HORIZON", "SILENT_ARCHITECT"]
+            },
+            9: {
+                title: "[ TIER 009 // VOYNICH_FREQUENCY_MATRIX ]",
+                task: "Unsolved botanical folio 0x57R. Entropy equals 4.12 bits/glyph.<br>Extract dominant bigram vector.",
+                sub: "Analyze EVA transcription index for the hidden zodiac root.",
+                color: "#ff79c6",
+                sol: ["EVA_OR_TAURUS", "TAURUS", "FOLIO_57R"]
+            },
+            10: {
+                title: "[ TIER 010 // WHEELER_RETROCAUSALITY ]",
+                task: "Delayed-choice quantum erasure confirms the present alters the past.<br>A photon chooses its path after passage.",
+                sub: "Input the command to collapse past trajectories.",
+                color: "#bd93f9",
+                sol: ["ERASE_THE_PAST", "DELAYED_CHOICE"]
+            },
+            11: {
+                title: "[ TIER 011 // BEKENSTEIN_HAWKING_BOUND ]",
+                task: "Maximum information content of a spatial region is bounded by its area.<br><code>S = (c³ k A) / (4 G ħ)</code>.",
+                sub: "Input geometric entropy coefficient [A / 4G].",
+                color: "#ff5555",
+                sol: ["A_OVER_4G", "A/4G", "BEKENSTEIN_BOUND"]
+            },
+            12: {
+                title: "[ TIER 012 // FERMI_DRAKE_NULL_FILTER ]",
+                task: "Where is the cosmic choir? Drake equation evaluates to zero.<br>Identify the terminal evolutionary barrier.",
+                sub: "\"The Great Silence is an active defense mechanism.\"",
+                color: "#ffb86c",
+                sol: ["GREAT_FILTER_NULL", "GREAT_FILTER"]
+            },
+            13: {
+                title: "[ TIER 013 // POINCARE_RECURRENCE_CYCLE ]",
+                task: "An isolated thermodynamic system returns to its initial microstate.<br>Recurrence time: <code>T ~ exp(S / k<sub>B</sub>)</code>.",
+                sub: "Enter the cosmic recurrence exponent magnitude.",
+                color: "#50fa7b",
+                sol: ["10_POW_10_POW_100", "POINCARE_RECURRENCE"]
+            },
+            14: {
+                title: "[ TIER 014 // DIRAC_SEA_ANNIHILATION ]",
+                task: "Infinite negative energy states are occupied.<br>A quantum fluctuation creates an electron-positron hole.",
+                sub: "Identify the vacant negative energy state.",
+                color: "#f1fa8c",
+                sol: ["ANTIMATTER_HOLE", "POSITRON_HOLE", "DIRAC_SEA"]
+            },
+            15: {
+                title: "[ TIER 015 // CASIMIR_VACUUM_PRESSURE ]",
+                task: "Two uncharged conducting plates in vacuum experience attraction.<br><code>F/A = -(π² ħ c) / (240 d⁴)</code>.",
+                sub: "What state of energy density manifests between the boundaries?",
+                color: "#8be9fd",
+                sol: ["NEGATIVE_PRESSURE", "NEGATIVE_ENERGY", "CASIMIR_EFFECT"]
+            },
+            16: {
+                title: "[ TIER 016 // SCHWARZSCHILD_METRIC_COLLAPSE ]",
+                task: "Spacetime metric singularity: <code>g<sub>00</sub> = -(1 - 2GM / rc²)</code>.<br>Collapse occurs when r reaches critical radius.",
+                sub: "Input the exact algebraic formula for r_s.",
+                color: "#ff79c6",
+                sol: ["2GM_OVER_C_SQUARED", "2GM/C^2", "SCHWARZSCHILD_RADIUS"]
+            },
+            17: {
+                title: "[ TIER 017 // TACHYONIC_CHERENKOV_CONE ]",
+                task: "Hypothetical field with imaginary mass: <code>m² < 0</code>.<br>Velocity exceeds c, creating vacuum radiation cone.",
+                sub: "Enter the tachyonic dispersion state.",
+                color: "#bd93f9",
+                sol: ["SUPERLUMINAL_IMAGINARY", "TACHYON_FIELD"]
+            },
+            18: {
+                title: "[ TIER 018 // TSIRELSON_QUANTUM_BOUND ]",
+                task: "Classical correlation max = 2. Quantum CHSH inequality max = 2√2.<br>No physical theory can exceed this correlation.",
+                sub: "Input the name of this absolute quantum ceiling.",
+                color: "#ff5555",
+                sol: ["TSIRELSON_BOUND", "TSIRELSON"]
+            },
+            19: {
+                title: "[ TIER 019 // ER_EPR_FINAL_BRIDGE ]",
+                task: "CONVERGENCE OF EPOCH I:<br>Wormhole geometry (ER) equals Quantum Entanglement (EPR).<br>Spacetime fabric is woven from entangled qubits.",
+                sub: "Input the grand gravitational-quantum identity to unlock Epoch II.",
+                color: "#ffffff",
+                sol: ["WORMHOLE_IS_ENTANGLEMENT", "ER=EPR", "ER_EQUALS_EPR"]
+            }
+        };
+
+        let currentTier = 1;
+        let canvasAnimId = null;
+
+        const terminalBox = document.getElementById('terminal-box');
+        const epochTag = document.getElementById('epoch-tag');
+        const tierTitle = document.getElementById('tier-title');
+        const taskDesc = document.getElementById('task-desc');
+        const subDesc = document.getElementById('sub-desc');
+        const passInput = document.getElementById('pass-input');
+        const submitBtn = document.getElementById('submit-btn');
         const log = document.getElementById('log');
+        const tierCounter = document.getElementById('tier-counter');
+        const entropyTag = document.getElementById('entropy-tag');
+        const canvasBox = document.getElementById('canvas-box');
+        const audioBox = document.getElementById('audio-box');
+        const hexBox = document.getElementById('hex-box');
+        const canvas = document.getElementById('main-canvas');
+        const ctx = canvas.getContext('2d');
 
-        // УРОВЕНЬ 1
-        document.getElementById('f1').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const val = document.getElementById('in1').value;
-            if (val === "") {
-                log.style.color = "#00ff41";
-                log.innerText = "[ACCESS GRANTED]: Entering Sector 02...";
-                setTimeout(() => {
-                    document.getElementById('lvl1').classList.add('hidden');
-                    document.getElementById('lvl2').classList.remove('hidden');
-                    log.innerText = "";
-                }, 800);
-            } else if (val.trim() === "0") {
-                log.style.color = "#ff3333";
-                log.innerText = "[ERROR 0x01]: You provided '0'. The void demands ABSENCE.";
-            } else {
-                log.style.color = "#ff3333";
-                log.innerText = "[REJECTED]: Waveform collapsed.";
-            }
-        });
+        function loadTier(tNum) {
+            currentTier = tNum;
+            tierCounter.innerText = `TIER: ${String(tNum).padStart(3, '0')} / 133`;
+            entropyTag.innerText = `ENTROPY: ${(Math.random()*2 + (tNum/19)*5).toFixed(4)} BIT`;
 
-        // УРОВЕНЬ 2
-        document.getElementById('f2').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const val = document.getElementById('in2').value.trim().toUpperCase();
-            if (val.includes("0X03_TESSERACT") || val.includes("TESSERACT")) {
-                log.style.color = "#00e5ff";
-                log.innerText = "[FREQUENCY MATCHED]: Warping to 4th Dimension...";
-                setTimeout(() => {
-                    document.getElementById('lvl2').classList.add('hidden');
-                    document.getElementById('lvl3').classList.remove('hidden');
-                    log.innerText = "";
-                    initTesseract();
-                }, 800);
-            } else {
-                log.style.color = "#ff3333";
-                log.innerText = "[ERROR]: Noise rejected. Spectrum signature invalid.";
-            }
-        });
-
-        // УРОВЕНЬ 3 (ХАРДКОР: Двойная проверка углов)
-        let aXW = 0, aYW = 0, isDrag = false, lx = 0, ly = 0;
-        document.getElementById('f3').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const val = document.getElementById('in3').value.trim().toUpperCase();
-            if (val === "0X04_ENTROPY_WELL" || val === "ENTROPY_WELL") {
-                log.style.color = "#bd93f9";
-                log.innerText = "[4D AXIS COLLAPSED]: Entering Entropy Singularity...";
-                setTimeout(() => {
-                    document.getElementById('lvl3').classList.add('hidden');
-                    document.getElementById('lvl4').classList.remove('hidden');
-                    log.innerText = "";
-                }, 800);
-            } else {
-                log.style.color = "#ff3333";
-                log.innerText = "[ALIGNMENT FAILED]: 4D Phase angle variance detected.";
-            }
-        });
-
-        function initTesseract() {
-            const canvas = document.getElementById('tesseract');
-            const ctx = canvas.getContext('2d');
-            const box = document.getElementById('canvas-box');
-            canvas.width = box.clientWidth;
-            canvas.height = box.clientHeight;
-
-            const vertices = [];
-            for (let i = 0; i < 16; i++) {
-                vertices.push([(i&1)?1:-1, (i&2)?1:-1, (i&4)?1:-1, (i&8)?1:-1]);
-            }
-            const edges = [];
-            for (let i = 0; i < 16; i++) {
-                for (let j = i + 1; j < 16; j++) {
-                    let diff = 0;
-                    for (let k = 0; k < 4; k++) if (vertices[i][k] !== vertices[j][k]) diff++;
-                    if (diff === 1) edges.push([i, j]);
-                }
+            if (tNum > 19) {
+                // ПЕРЕХОД В ЭПОХУ II
+                terminalBox.innerHTML = `
+                    <h1 style="color:#00ffff;">[ EPOCH I CONQUERED ]</h1>
+                    <p style="color:#a0ffa0; margin:20px 0;">
+                        <b>ALL 19 RELATIVISTIC TIERS ANNIHILATED.</b><br>
+                        Space-time manifold has successfully collapsed into the quantum domain.
+                    </p>
+                    <div style="background:#000; border:1px solid #00ffff; color:#00ffff; padding:15px; font-weight:bold;">
+                        EPOCH II ACCESS KEY: <code>0x20_QUANTUM_NON_LOCALITY</code>
+                    </div>
+                `;
+                return;
             }
 
-            function start(e) { isDrag = true; const t = e.touches?e.touches[0]:e; lx = t.clientX; ly = t.clientY; }
-            function move(e) {
-                if(!isDrag) return;
-                const t = e.touches?e.touches[0]:e;
-                aXW += (t.clientX - lx) * 0.005;
-                aYW += (t.clientY - ly) * 0.005;
-                lx = t.clientX; ly = t.clientY;
+            const t = EPOCH_I[tNum];
 
-                // УЛЬТРА-ТОЧНОСТЬ: Оба угла должны сойтись в золотое сечение (шанс случайного попадания 0.000001%)
-                const targetXW = 1.61803; 
-                const targetYW = 0.78539; 
-                const dX = Math.abs((Math.abs(aXW) % Math.PI) - targetXW);
-                const dY = Math.abs((Math.abs(aYW) % Math.PI) - targetYW);
+            document.body.style.color = t.color;
+            terminalBox.style.borderColor = t.color;
+            terminalBox.style.boxShadow = `0 0 30px ${t.color}33`;
+            submitBtn.style.background = t.color;
+            submitBtn.style.color = (t.color === "#ffffff" || t.color === "#f1fa8c" || t.color === "#50fa7b") ? "#000" : "#000";
 
-                if (dX < 0.005 && dY < 0.005) {
-                    log.style.color = "#50fa7b";
-                    log.innerText = "[RESONANCE 0.0001%]: Key: 0x04_ENTROPY_WELL";
-                }
-            }
-            function end() { isDrag = false; }
-
-            canvas.addEventListener('mousedown', start);
-            window.addEventListener('mousemove', move);
-            window.addEventListener('mouseup', end);
-            canvas.addEventListener('touchstart', start);
-            window.addEventListener('touchmove', move);
-            window.addEventListener('touchend', end);
-
-            function draw() {
-                ctx.fillStyle = '#080808';
-                ctx.fillRect(0,0,canvas.width,canvas.height);
-                // Авто-вращение теперь вращает в холостую, никогда не давая ключ
-                aXW += 0.003; aYW += 0.002;
-
-                const proj = vertices.map(v => {
-                    let p = [v[0]*Math.cos(aXW)-v[3]*Math.sin(aXW), v[1], v[2], v[0]*Math.sin(aXW)+v[3]*Math.cos(aXW)];
-                    p = [p[0], p[1]*Math.cos(aYW)-p[3]*Math.sin(aYW), p[2], p[1]*Math.sin(aYW)+p[3]*Math.cos(aYW)];
-                    const w = 1 / (2.6 - p[3]);
-                    const p3 = [p[0]*w, p[1]*w, p[2]*w];
-                    const z = 1 / (3.0 - p3[2]);
-                    const sc = canvas.height * 0.42;
-                    return [p3[0]*z*sc + canvas.width/2, p3[1]*z*sc + canvas.height/2];
-                });
-
-                ctx.strokeStyle = 'rgba(189, 147, 249, 0.7)';
-                ctx.lineWidth = 1.2;
-                edges.forEach(([i, j]) => {
-                    ctx.beginPath();
-                    ctx.moveTo(proj[i][0], proj[i][1]);
-                    ctx.lineTo(proj[j][0], proj[j][1]);
-                    ctx.stroke();
-                });
-                requestAnimationFrame(draw);
-            }
-            draw();
-        }
-
-        // УРОВЕНЬ 4 (ЛОГИКА БРЕЙНФАКА И СИНГУЛЯРНОСТИ)
-        document.getElementById('f4').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const val = document.getElementById('in4').value.trim().toUpperCase();
-            
-            // ПРАВИЛЬНЫЙ ОТВЕТ: KERNEL (Результат работы Brainfuck-программы после XOR-дешифровки)
-            if (val === "KERNEL" || val === "0X05_SINGULARITY") {
-                document.getElementById('entropy-val').innerText = "0.0000";
-                log.style.color = "#50fa7b";
-                log.innerHTML = "<b>[SINGULARITY STABILIZED]</b><br>LEVEL 05 KEY: <b>0x05_CHRONOS_PARADOX</b>";
-            } else {
-                log.style.color = "#ff3333";
-                log.innerText = "[REJECTED]: Entropy overflow. System degraded.";
-            }
-        });
-    </script>
-</body>
-</html>
+            tierTitle.innerHTML = t.title;
+            taskDesc.innerHTML = t.task;
+            subDesc.innerHTML = t.sub;
+            passInput.value = "";
