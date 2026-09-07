@@ -86,11 +86,7 @@
             border-top: 1px solid #222;
             padding-top: 8px;
         }
-        .glitch-lock { 
-            border-color: #ff0055 !important; 
-            color: #ff0055 !important; 
-            box-shadow: 0 0 40px rgba(255, 0, 85, 0.5) !important; 
-        }
+        .glitch-lock { border-color: #ff0055 !important; color: #ff0055 !important; box-shadow: 0 0 40px rgba(255, 0, 85, 0.5) !important; }
         .whiteout { background: #fff !important; color: #000 !important; box-shadow: 0 0 50px #fff !important; }
     </style>
 </head>
@@ -122,7 +118,7 @@
         <div class="meta-info">
             <span id="tier-counter">TIER: 001 / 133</span>
             <span id="strikes-tag">ATTEMPTS: 3 / 3</span>
-            <span id="epoch-status">SECTORS: 133 COMPILED</span>
+            <span id="epoch-status">SECTORS: 133 SHA-256 LOCKED</span>
         </div>
     </div>
 
@@ -130,7 +126,7 @@
     <script src="visuals.js"></script>
     <script src="database.js"></script>
 
-    <!-- ОСНОВНОЙ ДВИЖОК С ЭНЕРГОНЕЗАВИСИМОЙ ПАМЯТЬЮ -->
+    <!-- ОСНОВНОЙ КРИПТО-ДВИЖОК -->
     <script>
         let currentTier = 1;
         let strikes = parseInt(localStorage.getItem('__void_strikes') || "3");
@@ -152,7 +148,14 @@
         const hexBox = document.getElementById('hex-box');
         const canvas = document.getElementById('main-canvas');
 
-        // ПРОВЕРКА СОХРАНЕННОЙ БЛОКИРОВКИ ПРИ ЗАГРУЗКЕ
+        // ХЕШ-ФУНКЦИЯ SHA-256
+        async function sha256(str) {
+            const buf = new TextEncoder().encode(str.trim().toUpperCase());
+            const hashBuf = await crypto.subtle.digest('SHA-256', buf);
+            const hashArr = Array.from(new Uint8Array(hashBuf));
+            return hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
         function checkPersistentLock() {
             const lockUntil = parseInt(localStorage.getItem('__void_lock_until') || "0");
             const now = Date.now();
@@ -208,10 +211,11 @@
             }
         }
 
-        function handleValidation() {
+        async function handleValidation() {
             if (isLocked || checkPersistentLock()) return;
 
-            const val = passInput.value.trim().toUpperCase();
+            const rawVal = passInput.value.trim();
+            const val = rawVal.toUpperCase();
             const t = window.MASTER_DB[currentTier];
             if (!t) return;
 
@@ -223,13 +227,19 @@
                 return;
             }
 
+            // Вычисляем SHA-256 хеш от ввода пользователя
+            const inputHash = await sha256(rawVal);
+            const inputUpperHash = await sha256(val);
+
             let correct = false;
-            if (currentTier === 1 && val === "") correct = true;
-            else if (currentTier === 1 && val === "0") {
+            // Уровень 1 (пустой ввод)
+            if (currentTier === 1 && rawVal === "") {
+                correct = true;
+            } else if (currentTier === 1 && val === "0") {
                 log.style.color = "#ff3333";
                 log.innerText = "[ERROR 0x01]: You provided '0'. The void demands ABSENCE.";
                 return;
-            } else if (t[7].includes(val)) {
+            } else if (t[7].includes(inputHash) || t[7].includes(inputUpperHash)) {
                 correct = true;
             }
 
@@ -285,7 +295,6 @@
             }
         });
 
-        // НЕПРОБИВАЕМЫЙ ЛОКДАУН (ПЕРСИСТЕНТНЫЙ ТАЙМЕР)
         function triggerLockout(reason, durationSeconds) {
             isLocked = true;
             terminalBox.classList.add('glitch-lock');
