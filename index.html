@@ -122,11 +122,9 @@
         </div>
     </div>
 
-    <!-- ПОДКЛЮЧАЕМ НАШИ МОДУЛИ -->
     <script src="visuals.js"></script>
     <script src="database.js"></script>
 
-    <!-- ОСНОВНОЙ КРИПТО-ДВИЖОК -->
     <script>
         let currentTier = 1;
         let strikes = parseInt(localStorage.getItem('__void_strikes') || "3");
@@ -148,7 +146,6 @@
         const hexBox = document.getElementById('hex-box');
         const canvas = document.getElementById('main-canvas');
 
-        // ХЕШ-ФУНКЦИЯ SHA-256
         async function sha256(str) {
             const buf = new TextEncoder().encode(str.trim().toUpperCase());
             const hashBuf = await crypto.subtle.digest('SHA-256', buf);
@@ -227,12 +224,10 @@
                 return;
             }
 
-            // Вычисляем SHA-256 хеш от ввода пользователя
             const inputHash = await sha256(rawVal);
             const inputUpperHash = await sha256(val);
 
             let correct = false;
-            // Уровень 1 (пустой ввод)
             if (currentTier === 1 && rawVal === "") {
                 correct = true;
             } else if (currentTier === 1 && val === "0") {
@@ -258,7 +253,7 @@
                             ALL 133 QUANTUM SECTORS ANNIHILATED.
                         </p>
                         <div style="background:#000; color:#fff; padding:20px; font-size:1.2rem; font-weight:bold; letter-spacing:4px; margin:20px 0;">
-                            REVEALED FRAGMENT: "COLLAPSE"<br>
+                            REVEALED FRAGMENT: "${val}"<br>
                             <span style="font-size:0.75rem; color:#888;">[POSITION: 08 / 14]</span>
                         </div>
                         <p style="color:#333; font-size:0.8rem;">
